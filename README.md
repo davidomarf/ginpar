@@ -2,10 +2,17 @@
 
 Awkwardly named after _Generative Interactive Parametrisable Canvases_.
 
-This is a light Python script that converts a list of P5.js projects into an
-interactive website that includes forms to control the most important project
-variables (defined by you) and adds utilities to make easier to replicate
-previous results by forcing the use of seeds.
+Generate a static site that indexes a list of P5.js sketches and turns each of
+those into an interactive sketch.
+
+- Sketches are inside a folder `sketches/`
+- Will use the filename as the sketch name.
+- Index of the site will contain a list of `a` tags for each `sketch`.
+- Will read each sketch and create a page for each one:
+  - A form will be created using a `params` object that specifies the type,
+  range, step, and default values of the variables.
+  - A fixed section will contain the canvas and will allow for easy saving,
+  auto-naming using the seed, and scaling.
 
 Current version may work for other libraries, but it's only meant for P5.js.
 
@@ -13,12 +20,17 @@ Following versions my guarantee support for different libraries.
 
 ## How to use
 
-1. Download the content of this repository.
-1. Clear the contents of `sketches/` and create your own.
-1. For each script, you should add this (preferably at the beginning):
+1. Install Ginpar.
+  `pip install ginpar`
+1. Create `config.toml` to indicate the metadata of the website. You can copy
+   [this config.toml example][config-example].
+1. Create `sketches/` and add all your P5.js sketches.
+1. For each script, you must define the `ginpar.params` object
+  (preferably at the beginning).
+  Read the [`ginpar.params` API][params-api]
     ```js
     /* ## */
-    const params = {
+    const ginpar.params = {
     height: {
         value: 500,
         type: "number",
@@ -36,11 +48,13 @@ Following versions my guarantee support for different libraries.
     /* ## */
     ```
     **Note that the `/* ## */` are the important thing to add!**
-1. Make sure `config.py` is properly set up. Here you can specify the urls for
-each library you'd need to use, and metadata for the website.
+    
 1. Run `python build.py`.
 1. Enjoy your website created at `public/`.
 
 ## License
 
 [MIT](./LICENSE)
+
+[config-example]:config-example
+[params-api]:params-api
