@@ -1,4 +1,4 @@
-# Ginpar
+# Ginpar ![PyPI](https://img.shields.io/pypi/v/ginpar)
 
 Awkwardly named after _Generative Interactive Parametrisable Canvases_.
 
