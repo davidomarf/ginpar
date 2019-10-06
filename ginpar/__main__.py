@@ -1,5 +1,5 @@
 """
-python -m pelican module entry point to run via python -m
+python -m ginpar module entry point to run via python -m
 """
 from . import main
 
