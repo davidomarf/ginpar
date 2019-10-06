@@ -44,6 +44,11 @@ def main():
 
     os.mkdir('public')
 
+    ## Copy the static/ folder of the theme
+    shutil.copytree(
+        os.path.join('themes', _THEME, 'static'), 
+         os.path.join('public', 'static'))
+
     ## Create a sketches array
     sketches_path = "./sketches"
     sketches = []
@@ -84,4 +89,3 @@ def main():
             sketch.write(x)
         sf.close()
         sketch.close()
-main()
