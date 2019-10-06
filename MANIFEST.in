@@ -1,0 +1,1 @@
+recursive-include ginpar *.html *.css *.py *.jinja2

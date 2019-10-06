@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+    <script language="javascript" type="text/javascript" src="./sketch.js" defer></script>
+{% endblock %}
+
+{% block content %}
+    <h3> This is {{sketch}}</h3>
+    {{_CONFIG}}
+{% endblock %}

@@ -22,9 +22,10 @@ Following versions my guarantee support for different libraries.
 
 1. Install Ginpar.
   `pip install ginpar`
-1. Create `config.toml` to indicate the metadata of the website. You can copy
-   [this config.toml example][config-example].
-1. Create `sketches/` and add all your P5.js sketches.
+1. Initialize a new project
+  `ginpar-init`
+1. Modify `config.py` to reflect the metadata of the website.
+1. Add your sketches to `sketches/`. Feel free to remove `example.js`.
 1. For each script, you must define the `ginpar.params` object
   (preferably at the beginning).
   Read the [`ginpar.params` API][params-api]
@@ -48,9 +49,14 @@ Following versions my guarantee support for different libraries.
     /* ## */
     ```
     **Note that the `/* ## */` are the important thing to add!**
-    
-1. Run `python build.py`.
-1. Enjoy your website created at `public/`.
+1. Build your static site
+  `ginpar`.
+1. Enjoy your site created at `public/`.
+
+## Dependencies
+
+This project only uses [Jinja2][jinja] as template engine, however, some code
+snippets were heavily inspired by [Pelican][pelican] source code.
 
 ## License
 
@@ -58,3 +64,5 @@ Following versions my guarantee support for different libraries.
 
 [config-example]:config-example
 [params-api]:params-api
+[jinja]:https://jinja.palletsprojects.com/
+[pelican]:https://getpelican.com

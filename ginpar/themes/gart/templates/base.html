@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="{% block html_lang %}{{ DEFAULT_LANG }}{% endblock html_lang %}">
+<head>
+        {% block head %}
+        <title>{% block title %}{{ SITENAME }}{% endblock title %}</title>
+        <meta charset="utf-8" />        
+        {% endblock head %}
+</head>
+
+<body id="index" class="home">
+        {% block content %}
+        {% endblock %}
+</body>
+</html>

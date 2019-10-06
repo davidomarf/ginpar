@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+    <h3> This is list of sketches</h3>
+    {% for s in sketches %}
+        {% set s_title = s.split("/")[-1].split(".")[0] %}
+        <li> <a href="{{s_title}}">{{s_title}}</a></li>
+    {% endfor %}
+{% endblock %}
