@@ -4,6 +4,7 @@ import shutil
 from jinja2 import Environment, FileSystemLoader
 
 from ginpar.settings import read_config
+import ginpar.generators as gg
 
 _CONFIG_FILE = 'config.json'
 
@@ -21,7 +22,6 @@ def build_link(sketch):
 
 def build_index(sketches):
     content = ""
-    print(sketches)
     for s in sketches:
         content += build_link(s)
     return content
@@ -43,9 +43,6 @@ def main():
         shutil.rmtree('public')
 
     os.mkdir('public')
-
-    ## Copy static folder
-    shutil.copytree("static", "public/static")
 
     ## Create a sketches array
     sketches_path = "./sketches"
@@ -69,11 +66,12 @@ def main():
 
         ## Create a directory with the sketch title
         os.mkdir(f'public/{title}')
-
         ## Create index.html
         _sketch_template = _jinja_env.get_template('sketch.html')
         sketch_index = open(f'public/{title}/index.html', "w+")
-        sketch_index.write(_sketch_template.render(sketch = s))
+        sketch_index.write(_sketch_template.render(
+            sketch = s,
+            form = gg.sketch_index(open(s).read())))
         sketch_index.close()
 
         ## Create sketch.js
@@ -86,3 +84,4 @@ def main():
             sketch.write(x)
         sf.close()
         sketch.close()
+main()

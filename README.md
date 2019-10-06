@@ -30,25 +30,49 @@ Following versions my guarantee support for different libraries.
   (preferably at the beginning).
   Read the [`ginpar.params` API][params-api]
     ```js
-    /* ## */
-    const ginpar.params = {
-    height: {
-        value: 500,
-        type: "number",
-        range: [0, 4096]
-    },
-    my-variable: {
-        value: .8,
-        type: "slide",
-        range: [0, 1],
-        step: .05
-        // ...
-    },
-    //   ...
-    };
-    /* ## */
+    /* ##ginpar */
+    const paramsJSON = `[
+      {
+        "name": "Width",
+        "attrs": {
+          "type": "number",
+          "value": 2048,
+          "min": 0,
+          "max": 4096
+        }
+      },
+      {
+        "name": "Height",
+        "attrs": {
+          "type": "number",
+          "value": 2560,
+          "min": 0,
+          "max": 5120
+        }
+      },
+      {
+        "name": "Stop odds",
+        "attrs": {
+          "type": "number",
+          "value": 0.8,
+          "step": 0.05,
+          "min": 0,
+          "max": 1
+        }
+      },
+      {
+        "name": "Multiplication odds",
+        "attrs": {
+          "type": "number",
+          "value": 0.5,
+          "step": 0.05,
+          "min": 0,
+          "max": 1
+        }
+      }]`
+    /* ##ginpar */
     ```
-    **Note that the `/* ## */` are the important thing to add!**
+    **Note that the `/* ##ginpar */` are the important thing to add!**
 1. Build your static site
   `ginpar`.
 1. Enjoy your site created at `public/`.
