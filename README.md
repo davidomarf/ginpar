@@ -73,6 +73,8 @@ Following versions my guarantee support for different libraries.
     /* ##ginpar */
     ```
     **Note that the `/* ##ginpar */` are the important thing to add!**
+1. In your `setup()` function, in your `createCanvas` instruction, add:
+  `createCanvas(w, h).parent("artwork-container");`
 1. Build your static site
   `ginpar`.
 1. Enjoy your site created at `public/`.
