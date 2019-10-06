@@ -30,10 +30,11 @@ Following versions my guarantee support for different libraries.
   (preferably at the beginning).
   Read the [`ginpar.params` API][params-api]
     ```js
-    /* ##ginpar */
+      /* ##ginpar */
     const paramsJSON = `[
       {
         "name": "Width",
+        "var": "WIDTH",
         "attrs": {
           "type": "number",
           "value": 2048,
@@ -43,6 +44,7 @@ Following versions my guarantee support for different libraries.
       },
       {
         "name": "Height",
+        "var": "HEIGHT",
         "attrs": {
           "type": "number",
           "value": 2560,
@@ -52,20 +54,11 @@ Following versions my guarantee support for different libraries.
       },
       {
         "name": "Stop odds",
+        "var": "STOP_ODDS",
         "attrs": {
-          "type": "number",
+          "type": "range",
           "value": 0.8,
-          "step": 0.05,
-          "min": 0,
-          "max": 1
-        }
-      },
-      {
-        "name": "Multiplication odds",
-        "attrs": {
-          "type": "number",
-          "value": 0.5,
-          "step": 0.05,
+          "step": 0.001,
           "min": 0,
           "max": 1
         }
@@ -73,6 +66,16 @@ Following versions my guarantee support for different libraries.
     /* ##ginpar */
     ```
     **Note that the `/* ##ginpar */` are the important thing to add!**
+1. To convert this JSON into the original variables you had declared, add:
+    ```js
+    function jsonToVars(json){
+      return Object.assign(...json.map(e => {return {[e.var]: e.attrs.value}}))
+    }
+
+    let {WIDTH, HEIGHT, STOP_ODDS} = jsonToVars(JSON.parse(paramsJSON))
+    ```
+    This will automatically assign the variables `WIDTH`, `HEIGHT`,
+    and `STOP_ODDS` to the value they had on the `paramsJSON`.
 1. In your `setup()` function, in your `createCanvas` instruction, add:
   `createCanvas(w, h).parent("artwork-container");`
 1. Build your static site
