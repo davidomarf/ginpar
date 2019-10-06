@@ -1,0 +1,36 @@
+body {
+	display:flex;
+}
+
+.form{
+	display:flex;
+	flex-direction:column;
+	padding:1em;
+}
+
+form{
+	display:flex;
+	flex-direction: column;
+}
+
+#artwork-container {
+	height: 100vh;
+    width: 100vh;
+
+	position: relative;
+}
+
+
+#artwork-container  canvas {
+	border: 1px solid black;
+	max-height: 100%;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+}
