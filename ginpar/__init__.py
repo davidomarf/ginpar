@@ -26,6 +26,9 @@ def build_index(sketches):
         content += build_link(s)
     return content
 
+def unkebab(s):
+    return " ".join(s.split("-"))
+
 def main():
     _CONFIG = read_config(_CONFIG_FILE)
 
@@ -75,7 +78,7 @@ def main():
         _sketch_template = _jinja_env.get_template('sketch.html')
         sketch_index = open(f'public/{title}/index.html', "w+")
         sketch_index.write(_sketch_template.render(
-            sketch = s,
+            sketch = unkebab(title),
             form = gg.sketch_index(open(s).read())))
         sketch_index.close()
 
