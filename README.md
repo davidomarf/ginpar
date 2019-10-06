@@ -33,7 +33,6 @@ Following versions my guarantee support for different libraries.
       /* ##ginpar */
     const paramsJSON = `[
       {
-        "name": "Width",
         "var": "WIDTH",
         "attrs": {
           "type": "number",
@@ -43,7 +42,6 @@ Following versions my guarantee support for different libraries.
         }
       },
       {
-        "name": "Height",
         "var": "HEIGHT",
         "attrs": {
           "type": "number",
@@ -53,7 +51,6 @@ Following versions my guarantee support for different libraries.
         }
       },
       {
-        "name": "Stop odds",
         "var": "STOP_ODDS",
         "attrs": {
           "type": "range",

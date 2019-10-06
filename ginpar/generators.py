@@ -28,6 +28,11 @@ def to_kebab(s):
 
 
 def input_tag(field):
+
+    ## If not name key was provided create one using var key
+    if 'name' not in field:
+        field['name'] = " ".join(field['var'].split("_")).capitalize()
+
     ## Obtain the html id
     id = to_kebab(field['name'])
     
