@@ -14,8 +14,8 @@ Ginpar aims to generate portfolios for generative artists.
 
 ## Contents
 
-- [tl;dr](#tldr)
 - [How to use](#how-to-use)
+  - [tl;dr](#tldr)
   - [Installing](#Installing)
   - [Initializing](#initializing)
   - [Preparing sketches](#preparing-sketches)
@@ -24,13 +24,14 @@ Ginpar aims to generate portfolios for generative artists.
   - [Building](#building)
   - [Deploying](#Deploying)
     - [Netlify](#netlify)
-- [Build with](#build-with)
+- [Built with](#built-with)
 - [Versioning](#Versioning)
 - [Contributors](#Contributors)
 - [License](#License)
 
+## How to use
 
-## tl;dr:
+### tl;dr:
 
 1. Install
     ```sh
@@ -44,9 +45,6 @@ Ginpar aims to generate portfolios for generative artists.
     ```sh
     $ ginpar
     ```
-
-## How to use
-
 
 ### Installing
 
