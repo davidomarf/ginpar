@@ -1,11 +1,26 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
-    <script language="javascript" type="text/javascript" src="./sketch.js" defer></script>
+<script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js">
+</script>
+<script language="javascript" type="text/javascript" src="./sketch.js" defer></script>
+<link rel="stylesheet" type="text/css" href="../static/css/sketch.css" />
 {% endblock %}
 
 {% block content %}
-    <h3> This is {{sketch}}</h3>
-    {{_CONFIG}}
+<div class="fscreen">
+    <div class="content">
+        <div class="form-container">
+            <h3>{{sketch | title}}</h3>
+            {{ form }}
+            <button type="button" onclick="ginpar_RandomizeForm();"> Randomize (R)</button>
+            <button type="button" onclick="updateSketch();"> Update (Space bar)</button>
+            <button type="button" onclick="ginpar_saveImage();"> Download (S) </button>
+        </div>
+        <div id="artwork-container"></div>
+    </div>
+    <div class="footer">
+        <p>Interactive sketch generated with the assistance of <a href="https://github.com/davidomarf/ginpar">Ginpar</a>.</p>
+    </div>
+</div>
 {% endblock %}
