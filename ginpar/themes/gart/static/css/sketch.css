@@ -1,0 +1,48 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background-color: #fbfbfb;
+}
+
+.fscreen {
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  display: flex;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+
+  padding: 1em;
+  margin: 1em;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+#artwork-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  padding: 1em;
+  margin: 1em;
+}
+
+canvas {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+.footer {
+  flex: 0 1 auto;
+  padding: 0 1em 1em;
+  margin: 0 1em;
+}

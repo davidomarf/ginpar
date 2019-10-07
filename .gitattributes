@@ -1,0 +1,5 @@
+# Consider the code inside examples as vendored
+examples/* linguist-vendored
+sketches/* linguist-vendored
+ginpar/sketches/* linguist-vendored
+ginpar/examples/* linguist-vendored

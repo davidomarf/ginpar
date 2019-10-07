@@ -1,6 +1,7 @@
 import os
 import shutil
 from pathlib import Path
+import sys
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -15,6 +16,17 @@ _jinja_env = Environment(
     loader=FileSystemLoader(_TEMPLATES_DIR),
     trim_blocks=True,
 )
+
+
+def argv_to_flag_dict(argv):
+    """Take an arguments vector and convert it into a dictionary"""
+    possible_args = ["--force"]
+    flags = {}
+    for arg in possible_args:
+        if arg in argv:
+            flags[arg] = True
+    return flags
+
 
 def create_folder(folder):
     print(f'Creating `{folder}`:', end='\n\t')
@@ -54,7 +66,35 @@ def copy_folder(fr, to):
     else:
         print(f'Success.')
 
+def try_remove(path):
+    if os.path.isdir(path):
+        print(f'`{path}` already exists. Attemping removal:', end = '\n\t')
+        try:
+            shutil.rmtree(path)
+        except:
+            print(f'Failure. Restart or delete manually.')
+        else:
+            print(f'Success.')
+    elif os.path.isfile(path):
+        print(f'`{path}` already exists. Attemping removal:', end = '\n\t')
+        try:
+            os.remove(path)
+        except:
+            print(f'Failure. Restart or delete manually.')
+        else:
+            print(f'Success.')
+    else:
+        print(f'`{path}` doesn\'t exist. Skipping.')
+
 def main():
+    flags = argv_to_flag_dict(sys.argv)
+    
+    if "--force" in flags:
+        print("\n---\nForcing quickstart. This will replace existent directories and files.\n---\n")
+        try_remove('sketches')
+        try_remove('themes')
+        try_remove('config.json')
+
     print("\n---\nInitializing the project with default values\n---\n")
     create_folder('sketches')
     copy_folder(_THEMES_DIR, 'themes')
