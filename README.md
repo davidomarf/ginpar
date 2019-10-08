@@ -1,5 +1,6 @@
 # Ginpar 
-![PyPI](https://img.shields.io/pypi/v/ginpar) ![PyPI - Format](https://img.shields.io/pypi/format/ginpar) ![Build](https://github.com/davidomarf/ginpar/workflows/build/badge.svg)
+[![PyPI](https://img.shields.io/pypi/v/ginpar)](https://pypi.org/project/ginpar/)
+[![Build](https://github.com/davidomarf/ginpar/workflows/build/badge.svg)](https://github.com/davidomarf/ginpar/actions?workflow=build)
 
 Ginpar is a **static website generator** for interactive P5.js sketches,
 awkwardly named after **Generative Interactive Parametrisable Canvases**.
