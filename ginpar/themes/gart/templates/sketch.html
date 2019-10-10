@@ -8,20 +8,42 @@
 <div class="fscreen">
     <div class="content">
         <div class="form-container">
-            <div class = "home-link">
-                <a href="/">< Go back home</a>
-            </div>
-            <h3>{{sketch | title}}</h3>
-            {{ form }}
-            <button type="button" onclick="ginpar_RandomizeForm();"> Randomize &#10; (R)</button>
-            <button type="button" onclick="updateSketch();"> Update (Space bar)</button>
-            <button type="button" onclick="ginpar_saveImage();"> Download (S) </button>
-        </div>
-        <div id="artwork-container"></div>
-    </div>
-    <div class="footer">
-        <p>Interactive sketch generated with the assistance of <a href="https://github.com/davidomarf/ginpar">Ginpar</a>.</p>
-    </div>
-</div>
-{% endblock %}
+            <div class="home-link">
+                <a href="/">
+                    < Go back home</a> </div> <h3>{{sketch | title}}</h3>
+                        {{ form }}
 
+                        <button type="button" onclick="ginpar_RandomizeForm();">
+                            Randomize
+                            <br>
+                            (R)
+                        </button>
+
+                        <button type="button" onclick="updateSketch();">
+                            Update
+                            <br>
+                            (Space bar)
+                        </button>
+
+                        <button type="button" onclick="ginpar_saveImage();">
+                            Download
+                            <br>
+                            (S)
+                        </button>
+            </div>
+            <div id="artwork-container"></div>
+        </div>
+        <div class="footer">
+            <p>Interactive sketch generated with the assistance of <a
+                    href="https://github.com/davidomarf/ginpar">Ginpar</a>.</p>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block scripts %}
+    {% set scripts = scripts or site.scripts %}
+    {% for script in scripts -%}
+    <script language="javascript" type="text/javascript" src="{{ script.url }}"></script>
+    {%- endfor %}
+    <script language="javascript" type="text/javascript" src="./sketch.js" defer></script>
+    {% endblock scripts %}
