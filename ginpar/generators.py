@@ -43,10 +43,12 @@ def input_tag(field):
     attrs = " ".join(attrs)
 
     div = f'''
+    <div class = "form-field">
     <label for="{id}">
         {field['name']}
     </label>
-    <input {attrs}>'''
+    <input {attrs}>
+    </div>'''
 
     return div
 

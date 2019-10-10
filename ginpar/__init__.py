@@ -6,7 +6,7 @@ from jinja2 import Environment, FileSystemLoader
 from ginpar.settings import read_config
 import ginpar.generators as gg
 
-_CONFIG_FILE = 'config.json'
+_SITE_FILE = 'config.json'
 
 
 def parse(path):
@@ -30,9 +30,9 @@ def unkebab(s):
     return " ".join(s.split("-"))
 
 def main():
-    _CONFIG = read_config(_CONFIG_FILE)
+    _SITE = read_config(_SITE_FILE)
 
-    _THEME = _CONFIG['THEME']
+    _THEME = _SITE['theme']
 
     _TEMPLATES_PATH = os.path.join('themes', _THEME, 'templates')
 
@@ -40,6 +40,8 @@ def main():
         loader=FileSystemLoader(_TEMPLATES_PATH),
         trim_blocks=True,
         )
+
+    _jinja_env.filters['unkebab'] = unkebab
 
     ## Remove existent /public folder and create an empty one
     if os.path.exists("public"):
@@ -65,7 +67,7 @@ def main():
     _index_template = _jinja_env.get_template('index.html')
 
     index = open("public/index.html", "w")
-    index.write(_index_template.render(sketches=sketches))
+    index.write(_index_template.render(sketches=sketches, site = _SITE))
     index.close()
 
     for s in sketches:
@@ -79,7 +81,8 @@ def main():
         sketch_index = open(f'public/{title}/index.html', "w+")
         sketch_index.write(_sketch_template.render(
             sketch = unkebab(title),
-            form = gg.sketch_index(open(s).read())))
+            form = gg.sketch_index(open(s).read()),
+            site = _SITE))
         sketch_index.close()
 
         ## Create sketch.js

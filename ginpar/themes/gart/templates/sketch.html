@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 
 {% block head %}
-<script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js">
-</script>
-<script language="javascript" type="text/javascript" src="./sketch.js" defer></script>
 <link rel="stylesheet" type="text/css" href="../static/css/sketch.css" />
 {% endblock %}
 
@@ -11,9 +8,12 @@
 <div class="fscreen">
     <div class="content">
         <div class="form-container">
+            <div class = "home-link">
+                <a href="/">< Go back home</a>
+            </div>
             <h3>{{sketch | title}}</h3>
             {{ form }}
-            <button type="button" onclick="ginpar_RandomizeForm();"> Randomize (R)</button>
+            <button type="button" onclick="ginpar_RandomizeForm();"> Randomize &#10; (R)</button>
             <button type="button" onclick="updateSketch();"> Update (Space bar)</button>
             <button type="button" onclick="ginpar_saveImage();"> Download (S) </button>
         </div>
@@ -24,3 +24,4 @@
     </div>
 </div>
 {% endblock %}
+

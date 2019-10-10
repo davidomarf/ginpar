@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="{% block html_lang %}{{ DEFAULT_LANG }}{% endblock html_lang %}">
+
 <head>
+        <link rel="stylesheet" type="text/css" href="../static/css/main.css" />
+        <meta charset="utf-8" />
         {% block head %}
-        <title>{% block title %}{{ SITENAME }}{% endblock title %}</title>
-        <meta charset="utf-8" />        
+        <title>{% block title %}{{ site.sitename }}{% endblock title %}</title>
         {% endblock head %}
 </head>
 
@@ -11,4 +13,9 @@
         {% block content %}
         {% endblock %}
 </body>
+
+<script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js">
+</script>
+<script language="javascript" type="text/javascript" src="./sketch.js" defer></script>
+
 </html>
