@@ -47,7 +47,7 @@ def input_tag(field):
     <label for="{id}">
         {field['name']}
     </label>
-    <input {attrs}>
+    <input name="{id}" {attrs}>
     </div>'''
 
     return div
