@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="{% block html_lang %}{{ DEFAULT_LANG }}{% endblock html_lang %}">
+
+<head>
+        <link rel="stylesheet" type="text/css" href="../static/css/main.css" />
+        <meta charset="utf-8" />
+        {% block head %}
+        <title>{% block title %}{{ site.sitename }}{% endblock title %}</title>
+        {% endblock head %}
+</head>
+
+<body id="index" class="home">
+        {% block content %}
+        {% endblock %}
+</body>
+
+{% block scripts %}
+{% endblock scripts %}
+
+</html>

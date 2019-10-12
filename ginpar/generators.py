@@ -41,14 +41,28 @@ def input_tag(field):
     for k, v in field["attrs"].items():
         attrs.append(f'{k}="{v}"')
     attrs = " ".join(attrs)
-
-    div = f'''
-    <div class = "form-field">
-    <label for="{id}">
-        {field['name']}
-    </label>
-    <input name="{id}" {attrs}>
-    </div>'''
+    
+    if id == "dimension":
+        div = f'''
+        <div class="form-field">
+            <label for="{{ id }}">
+                {{ name }}
+            </label>
+            <div class="dimension-input">
+                <input name="dimension-w" type="number" value="2048" max="9999">
+                <span >x</span>
+                <input name="dimension-h" type="number" value="2560" max="9999">
+            </div>
+        </div>
+        '''
+    else:
+        div = f'''
+        <div class = "form-field">
+        <label for="{id}">
+            {field['name']}
+        </label>
+        <input name="{id}" {attrs}>
+        </div>'''
 
     return div
 
