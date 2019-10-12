@@ -200,14 +200,9 @@ input[type="range"]:focus::-ms-fill-upper {
 
 .dimension-input {
   display: flex;
-  flex: 0 0 auto;
   justify-content: space-between;
 }
 .dimension-input span {
   color: #666;
-  font-size: 0.75em;
-}
-
-.dimension-input input { 
-  flex: 1 0 auto;
+  font-size: .75em;
 }

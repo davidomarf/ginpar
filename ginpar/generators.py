@@ -45,14 +45,18 @@ def input_tag(field):
     if id == "dimension":
         div = f'''
         <div class="form-field">
-            <label for="{{ id }}">
-                {{ name }}
+            <label for="{ id }">
+                { field['name'] }
             </label>
             <div class="dimension-input">
-                <input name="dimension-w" type="number" value="2048" max="9999">
-                <span >x</span>
-                <input name="dimension-h" type="number" value="2560" max="9999">
-            </div>
+            <input type="number" value="2048" min="0" max="4096">
+
+            <span>
+            x
+            </span>
+            
+            <input type="number" value="2048" min="0" max="4096">
+            </div>        
         </div>
         '''
     else:
