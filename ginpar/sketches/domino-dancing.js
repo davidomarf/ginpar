@@ -1,9 +1,9 @@
 /* ##ginpar */
 const paramsJSON = `[
   {
-     "var":"DIMENSION",
+     "var":"DIMENSIONS",
      "attrs":{
-        "type":"dimension",
+        "type":"dimensions",
         "value":[2048, 2560]
      }
   },
@@ -54,14 +54,14 @@ function jsonToVars(json){
 }
 
 let {
-  DIMENSION,
+  DIMENSIONS,
   NUMBER_OF_COLUMNS,
   COLUMN_Y_SD,
   COLUMN_HF_MIN,
   COLUMN_HF_MAX} = jsonToVars(JSON.parse(paramsJSON))
 
-const WIDTH = DIMENSION[0];
-const HEIGHT = DIMENSION[1];
+const WIDTH = DIMENSIONS[0];
+const HEIGHT = DIMENSIONS[1];
 
 /**
  * Standard function of p5js
