@@ -12,6 +12,9 @@ _TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 _THEMES_DIR = os.path.join(Path(os.path.dirname(os.path.abspath(__file__))).parent,
                               'themes')
 
+_SKETCHES_DIR = os.path.join(Path(os.path.dirname(os.path.abspath(__file__))).parent,
+                              'sketches')
+
 _jinja_env = Environment(
     loader=FileSystemLoader(_TEMPLATES_DIR),
     trim_blocks=True,
@@ -96,8 +99,8 @@ def main():
         try_remove('config.json')
 
     print("\n---\nInitializing the project with default values\n---\n")
-    create_folder('sketches')
     copy_folder(_THEMES_DIR, 'themes')
+    copy_folder(_SKETCHES_DIR, 'sketches')
     init_config()
 
 

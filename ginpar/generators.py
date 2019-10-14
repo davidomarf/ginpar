@@ -2,7 +2,40 @@ import os
 import string
 import json
 
+from jinja2 import Environment, FileSystemLoader
+
+def dict_to_attrs(d):
+    attrs = []
+    for k, v in d.items():
+        attrs.append(f'{k}="{v}"')
+    attrs = " ".join(attrs)
+    return attrs
+
 delimiters = '/* ##ginpar */'
+
+_INPUT_TEMPLATES_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    'templates')
+
+# Get a list that contains the name of the templates
+_INPUT_TEMPLATES_LIST = list(
+    map(
+        lambda e : e.split(".")[0],
+        filter(
+            lambda e : e.endswith(".html"),
+            os.listdir(_INPUT_TEMPLATES_DIR))))
+
+_jinja_env = Environment(
+    loader=FileSystemLoader(_INPUT_TEMPLATES_DIR),
+    trim_blocks=True,
+)
+
+_jinja_env.filters['getattrs'] = dict_to_attrs
+
+def makeValueGetter(attrs):
+    _TEMPLATE = _jinja_env.get_template("retrieve.js")
+    
+    return _TEMPLATE.render(attrs = attrs)
 
 def sketch_to_dict(s):
     """Receives the content of a sketch file with a JSON object
@@ -28,11 +61,6 @@ def to_kebab(s):
 
 
 def input_tag(field):
-
-    ## If not name key was provided create one using var key
-    if 'name' not in field:
-        field['name'] = " ".join(field['var'].split("_")).capitalize()
-
     ## Obtain the html id
     id = to_kebab(field['name'])
     
@@ -41,14 +69,16 @@ def input_tag(field):
     for k, v in field["attrs"].items():
         attrs.append(f'{k}="{v}"')
     attrs = " ".join(attrs)
+    
+    if id in _INPUT_TEMPLATES_LIST:
+        _input_template = _jinja_env.get_template(id + '.html')
+    else:
+        _input_template = _jinja_env.get_template('input.html')
+    
+    # print(attrs)
 
-    div = f'''
-    <label for="{id}">
-        {field['name']}
-    </label>
-    <input {attrs}>'''
-
-    return div
+    return (_input_template.render(
+        id=id, name = field['name'], attrs = field["attrs"]))
 
 def form_tag(fields):
     form = ["<form>"]
@@ -58,7 +88,14 @@ def form_tag(fields):
     form = "\n".join(form)
     return form
 
+def add_name(fields):
+    """Adds a `name` using the `var` when no `name` was specified"""
+    for field in fields:
+        if 'name' not in field:
+            field['name'] = " ".join(field['var'].split("_")).capitalize()
+        field['id'] = to_kebab(field['name'])
+    return fields
+
 def sketch_index(sketch):
-    form_data = sketch_to_dict(sketch)
-    return form_tag(form_data)
+    return form_tag(sketch)
     
