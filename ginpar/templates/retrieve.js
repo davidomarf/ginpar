@@ -1,13 +1,18 @@
 function updateVars(){
-    let attrs = {{attrs}}
-    for(let i = 0; i < attrs.length; i++){
-        let el = document.getElementById(attrs[i].id)
-        if (el){
-            console.log(
-                attrs[i].name, 
-                document.getElementById(attrs[i].id).value)
-        }
-    }
-}
+    {% for variable in attrs -%}
+        {% if variable['attrs']['type'] == 'dimensions' -%}
 
-updateVars()
+        {{variable.var}} = [
+                    document.getElementById("{{ variable.id }}-0").value,
+                    document.getElementById("{{ variable.id }}-1").value
+                ];
+
+        {% else %}
+        
+        {{variable.var}} = document.getElementById("{{variable.id}}").value;
+
+        {%- endif  %}
+    {%- endfor %}
+
+}
+{{'\n'}}
