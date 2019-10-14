@@ -32,6 +32,11 @@ _jinja_env = Environment(
 
 _jinja_env.filters['getattrs'] = dict_to_attrs
 
+def makeValueGetter(attrs):
+    _TEMPLATE = _jinja_env.get_template("retrieve.js")
+    
+    return _TEMPLATE.render(attrs = attrs)
+
 def sketch_to_dict(s):
     """Receives the content of a sketch file with a JSON object
     inside a pair of ginpar delimiters"""
@@ -56,11 +61,6 @@ def to_kebab(s):
 
 
 def input_tag(field):
-
-    ## If not name key was provided create one using var key
-    if 'name' not in field:
-        field['name'] = " ".join(field['var'].split("_")).capitalize()
-
     ## Obtain the html id
     id = to_kebab(field['name'])
     
@@ -88,7 +88,14 @@ def form_tag(fields):
     form = "\n".join(form)
     return form
 
+def add_name(fields):
+    """Adds a `name` using the `var` when no `name` was specified"""
+    for field in fields:
+        if 'name' not in field:
+            field['name'] = " ".join(field['var'].split("_")).capitalize()
+        field['id'] = to_kebab(field['name'])
+    return fields
+
 def sketch_index(sketch):
-    form_data = sketch_to_dict(sketch)
-    return form_tag(form_data)
+    return form_tag(sketch)
     

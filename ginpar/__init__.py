@@ -73,15 +73,22 @@ def main():
     for s in sketches:
         ## Ignore the path and extension of the sketch
         title = s.split("/")[-1].split(".")[0]
-
+        
         ## Create a directory with the sketch title
         os.mkdir(f'public/{title}')
+        
+        ## Convert the form JSON into a dict
+        form_dict = gg.sketch_to_dict(open(s).read())
+        
+        ## Add name key to the dict elements
+        form_dict = gg.add_name(form_dict)
+
         ## Create index.html
         _sketch_template = _jinja_env.get_template('sketch.html')
         sketch_index = open(f'public/{title}/index.html', "w+")
         sketch_index.write(_sketch_template.render(
             sketch = unkebab(title),
-            form = gg.sketch_index(open(s).read()),
+            form = gg.sketch_index(form_dict),
             site = _SITE))
         sketch_index.close()
 
@@ -91,6 +98,9 @@ def main():
 
         ## Copy all the content from original sketches/{title}.js to sketch.js
         sf = open(s, 'r')
+
+        sketch.write(gg.makeValueGetter(form_dict))
+
         for x in sf.readlines():
             sketch.write(x)
         sf.close()

@@ -226,3 +226,7 @@ dmypy.json
 .history
 
 # End of https://www.gitignore.io/api/node,linux,python,visualstudiocode
+
+/sketches
+/themes
+/config.json
