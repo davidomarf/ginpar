@@ -49,26 +49,13 @@ const paramsJSON = `[
 ]`
 /* ##ginpar */
 
-function jsonToVars(json){
-  return Object.assign(...json.map(e => {return {[e.var ]: e.attrs.value}}))
-}
-
-let {
-  DIMENSIONS,
-  NUMBER_OF_COLUMNS,
-  COLUMN_Y_SD,
-  COLUMN_HF_MIN,
-  COLUMN_HF_MAX} = jsonToVars(JSON.parse(paramsJSON))
-
-const WIDTH = DIMENSIONS[0];
-const HEIGHT = DIMENSIONS[1];
+updateVars();
 
 /**
  * Standard function of p5js
  */
 function setup() {
-  createCanvas(WIDTH, HEIGHT).parent("artwork-container");
-  background(225);
+  createCanvas(DIMENSIONS[0], DIMENSIONS[1]).parent("artwork-container");
 
   // Call draw() only once
   noLoop();
@@ -78,6 +65,9 @@ function setup() {
  * Standard function of p5js
  */
 function draw() {
+  // Set a background color
+  background(225);
+  
   // Don't draw the stroke of the shapes, and fill with gray
   noStroke();
   fill(30);
@@ -106,11 +96,11 @@ function generateColumns(n) {
     // Create a column. Here, x represents the top left corner,
     // and y the y coordinate of the middle point.
     let column = {
-      x: i * (WIDTH / n),
-      y: HEIGHT / 2 + randomGaussian(0, COLUMN_Y_SD),
+      x: i * (DIMENSIONS[0] / n),
+      y: DIMENSIONS[1] / 2 + randomGaussian(0, COLUMN_Y_SD),
         "name": "Column Y standard deviation",
-      width: WIDTH / (n * 1.3),
-      height: random(HEIGHT * COLUMN_HF_MIN, HEIGHT * COLUMN_HF_MAX)
+      width: DIMENSIONS[0] / (n * 1.3),
+      height: random(DIMENSIONS[1] * COLUMN_HF_MIN, DIMENSIONS[1] * COLUMN_HF_MAX)
     };
 
     // Change the x value to be the x coordinate of the middle point.
@@ -165,7 +155,7 @@ function generateSquaresForColumn(column) {
     });
 
     // Square is outside the canvas dimensions
-    if (squares[j].middle.y >= HEIGHT) break;
+    if (squares[j].middle.y >= DIMENSIONS[1]) break;
   }
   return squares;
 }
@@ -198,12 +188,12 @@ function drawSquares(squares, column) {
       // Create a custom RGBA color just to change the opacity
       fill(
         `rgba(30, 30, 30, ${1 -
-          abs(HEIGHT / 2 - squares[j].middle.y) / (HEIGHT / 2)})`
+          abs(DIMENSIONS[1] / 2 - squares[j].middle.y) / (DIMENSIONS[1] / 2)})`
       );
 
       // The squares outside the column are subject to a probability of not
       // being drawn. This probability increases the further away from the center.
-      if (random() * 0.9 < abs(HEIGHT / 2 - squares[j].middle.y) / (HEIGHT / 2))
+      if (random() * 0.9 < abs(DIMENSIONS[1] / 2 - squares[j].middle.y) / (DIMENSIONS[1] / 2))
         continue;
     }
 
