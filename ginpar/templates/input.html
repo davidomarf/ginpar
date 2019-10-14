@@ -2,5 +2,5 @@
     <label for="{{ id }}">
         {{ name }}
     </label>
-    <input name="{{ id }}" {{ attrs }}>
+    <input name="{{ id }}" {{ attrs | getattrs }}>
 </div>

@@ -2,7 +2,35 @@ import os
 import string
 import json
 
+from jinja2 import Environment, FileSystemLoader
+
+def dict_to_attrs(d):
+    attrs = []
+    for k, v in d.items():
+        attrs.append(f'{k}="{v}"')
+    attrs = " ".join(attrs)
+    return attrs
+
 delimiters = '/* ##ginpar */'
+
+_INPUT_TEMPLATES_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    'templates')
+
+# Get a list that contains the name of the templates
+_INPUT_TEMPLATES_LIST = list(
+    map(
+        lambda e : e.split(".")[0],
+        filter(
+            lambda e : e.endswith(".html"),
+            os.listdir(_INPUT_TEMPLATES_DIR))))
+
+_jinja_env = Environment(
+    loader=FileSystemLoader(_INPUT_TEMPLATES_DIR),
+    trim_blocks=True,
+)
+
+_jinja_env.filters['getattrs'] = dict_to_attrs
 
 def sketch_to_dict(s):
     """Receives the content of a sketch file with a JSON object
@@ -42,33 +70,15 @@ def input_tag(field):
         attrs.append(f'{k}="{v}"')
     attrs = " ".join(attrs)
     
-    if id == "dimension":
-        div = f'''
-        <div class="form-field">
-            <label for="{ id }">
-                { field['name'] }
-            </label>
-            <div class="dimension-input">
-            <input type="number" value="2048" min="0" max="4096">
-
-            <span>
-            x
-            </span>
-            
-            <input type="number" value="2048" min="0" max="4096">
-            </div>        
-        </div>
-        '''
+    if id in _INPUT_TEMPLATES_LIST:
+        _input_template = _jinja_env.get_template(id + '.html')
     else:
-        div = f'''
-        <div class = "form-field">
-        <label for="{id}">
-            {field['name']}
-        </label>
-        <input name="{id}" {attrs}>
-        </div>'''
+        _input_template = _jinja_env.get_template('input.html')
+    
+    # print(attrs)
 
-    return div
+    return (_input_template.render(
+        id=id, name = field['name'], attrs = field["attrs"]))
 
 def form_tag(fields):
     form = ["<form>"]

@@ -1,0 +1,16 @@
+<div class="form-field">
+    <label for="{{ id }}">
+        {{ name }}
+    </label>
+    <div class="dimension-input">
+        <input name="dimension-w" type="number"
+            value="{{ attrs.value[0] }}"
+            min="{{ attrs.min or 0}}"
+            max="{{ attrs.max or 9999}}">
+        <span>x</span>
+        <input name="dimension-h" type="number" 
+            value="{{ attrs.value[1] }}"
+            min="{{ attrs.min or 0 }}"
+            max="{{ attrs.max or 9999 }}">
+    </div>
+</div>
