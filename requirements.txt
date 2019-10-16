@@ -1,2 +1,4 @@
-Jinja2==2.10.3
-MarkupSafe==1.1.1
+-i https://pypi.org/simple
+jinja2==2.10.3
+markupsafe==1.1.1
+pyyaml==5.1.2
