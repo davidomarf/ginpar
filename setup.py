@@ -8,8 +8,7 @@ setup_requires = ['wheel']
 
 entry_points = {
     'console_scripts': [
-        'ginpar = ginpar.__main__:main',
-        'ginpar-quickstart = ginpar.tools.quickstart:main',
+        'ginpar = ginpar.cli:cli',
     ]
 }
 
