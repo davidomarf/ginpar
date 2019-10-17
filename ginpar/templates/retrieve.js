@@ -15,4 +15,5 @@ function updateVars(){
     {%- endfor %}
 
 }
+updateVars()
 {{'\n'}}
