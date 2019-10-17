@@ -37,22 +37,21 @@ def unkebab(s):
 
 def get_sketches_list(path):
     sketches = []
-    for r, _, f in os.walk(path):
-        for file in f:
-            if file.endswith(".js"):
-                # Get the sketch name without extension
-                name = file.split(".")[0]
+    # Create a list with all the directories inside path
+    for r, d, _ in os.walk(path):
+        for sketch in d:
+            sketches.append(
+                {
+                    "name": sketch,
+                    "script": os.path.join(r, sketch, "sketch.js"),
+                    "data": os.path.join(r, sketch, "data.yaml"),
+                }
+            )
 
-                # Check that there also exists a config file
-                if os.path.isfile(os.path.join(r, name + ".yaml")):
-                    # Add both script and data as one element
-                    sketches.append(
-                        {
-                            "name": name,
-                            "script": os.path.join(r, file),
-                            "data": os.path.join(r, name + ".yaml"),
-                        }
-                    )
+    # Remove all the directories that don't contain both  a `sketch.js` and `data.yaml` file
+    sketches[:] = filter(
+        lambda a: os.path.isfile(a["script"]) and os.path.isfile(a["data"]), sketches
+    )
     return sketches
 
 
@@ -99,7 +98,7 @@ def main():
     index = open("public/index.html", "w")
     index.write(
         _index_template.render(
-            sketches=map(lambda a: a["script"], sketches), site=_SITE
+            sketches=map(lambda a: a["name"], sketches), site=_SITE
         )
     )
     index.close()
