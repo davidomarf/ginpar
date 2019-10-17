@@ -2,7 +2,7 @@ import setuptools
 
 version = '0.4.0'
 
-requires = ['jinja2 >= 2.7', 'pyyaml']
+requires = ['jinja2 >= 2.7', 'pyyaml', 'click']
 
 setup_requires = ['wheel']
 
