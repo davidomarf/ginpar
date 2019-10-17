@@ -3,3 +3,4 @@ examples/* linguist-vendored
 sketches/* linguist-vendored
 ginpar/sketches/* linguist-vendored
 ginpar/examples/* linguist-vendored
+ginpar/themes/gart/static/* linguist-vendored

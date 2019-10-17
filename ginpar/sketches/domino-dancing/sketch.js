@@ -1,74 +1,8 @@
-/* ##ginpar */
-const paramsJSON = `[
-  {
-     "var":"DIMENSION",
-     "attrs":{
-        "type":"dimension",
-        "value":[2048, 2560]
-     }
-  },
-  {
-     "var":"NUMBER_OF_COLUMNS",
-     "attrs":{
-        "type":"number",
-        "value":30,
-        "step":1
-     }
-  },
-  {
-     "var":"COLUMN_Y_SD",
-     "name":"Columns offset sd",
-     "attrs":{
-        "type":"number",
-        "value":300,
-        "step":1
-     }
-  },
-  {
-     "var":"COLUMN_HF_MIN",
-     "name":"Minimum column height factor",
-     "attrs":{
-        "type":"range",
-        "value":0.1,
-        "step":0.01,
-        "min":0,
-        "max":1
-     }
-  },
-  {
-     "var":"COLUMN_HF_MAX",
-     "name":"Maximum column height factor",
-     "attrs":{
-        "type":"range",
-        "value":0.6,
-        "step":0.01,
-        "min":0,
-        "max":1
-     }
-  }
-]`
-/* ##ginpar */
-
-function jsonToVars(json){
-  return Object.assign(...json.map(e => {return {[e.var ]: e.attrs.value}}))
-}
-
-let {
-  DIMENSION,
-  NUMBER_OF_COLUMNS,
-  COLUMN_Y_SD,
-  COLUMN_HF_MIN,
-  COLUMN_HF_MAX} = jsonToVars(JSON.parse(paramsJSON))
-
-const WIDTH = DIMENSION[0];
-const HEIGHT = DIMENSION[1];
-
 /**
  * Standard function of p5js
  */
 function setup() {
-  createCanvas(WIDTH, HEIGHT).parent("artwork-container");
-  background(225);
+  createCanvas(DIMENSIONS[0], DIMENSIONS[1]).parent("artwork-container");
 
   // Call draw() only once
   noLoop();
@@ -78,6 +12,9 @@ function setup() {
  * Standard function of p5js
  */
 function draw() {
+  // Set a background color
+  background(225);
+  
   // Don't draw the stroke of the shapes, and fill with gray
   noStroke();
   fill(30);
@@ -106,11 +43,11 @@ function generateColumns(n) {
     // Create a column. Here, x represents the top left corner,
     // and y the y coordinate of the middle point.
     let column = {
-      x: i * (WIDTH / n),
-      y: HEIGHT / 2 + randomGaussian(0, COLUMN_Y_SD),
+      x: i * (DIMENSIONS[0] / n),
+      y: DIMENSIONS[1] / 2 + randomGaussian(0, COLUMN_Y_SD),
         "name": "Column Y standard deviation",
-      width: WIDTH / (n * 1.3),
-      height: random(HEIGHT * COLUMN_HF_MIN, HEIGHT * COLUMN_HF_MAX)
+      width: DIMENSIONS[0] / (n * 1.3),
+      height: random(DIMENSIONS[1] * COLUMN_HF_MIN, DIMENSIONS[1] * COLUMN_HF_MAX)
     };
 
     // Change the x value to be the x coordinate of the middle point.
@@ -165,7 +102,7 @@ function generateSquaresForColumn(column) {
     });
 
     // Square is outside the canvas dimensions
-    if (squares[j].middle.y >= HEIGHT) break;
+    if (squares[j].middle.y >= DIMENSIONS[1]) break;
   }
   return squares;
 }
@@ -198,12 +135,12 @@ function drawSquares(squares, column) {
       // Create a custom RGBA color just to change the opacity
       fill(
         `rgba(30, 30, 30, ${1 -
-          abs(HEIGHT / 2 - squares[j].middle.y) / (HEIGHT / 2)})`
+          abs(DIMENSIONS[1] / 2 - squares[j].middle.y) / (DIMENSIONS[1] / 2)})`
       );
 
       // The squares outside the column are subject to a probability of not
       // being drawn. This probability increases the further away from the center.
-      if (random() * 0.9 < abs(HEIGHT / 2 - squares[j].middle.y) / (HEIGHT / 2))
+      if (random() * 0.9 < abs(DIMENSIONS[1] / 2 - squares[j].middle.y) / (DIMENSIONS[1] / 2))
         continue;
     }
 
