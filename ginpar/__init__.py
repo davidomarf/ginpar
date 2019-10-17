@@ -97,9 +97,7 @@ def main():
     _index_template = _jinja_env.get_template("index.html")
     index = open("public/index.html", "w")
     index.write(
-        _index_template.render(
-            sketches=map(lambda a: a["name"], sketches), site=_SITE
-        )
+        _index_template.render(sketches=map(lambda a: a["name"], sketches), site=_SITE)
     )
     index.close()
 
