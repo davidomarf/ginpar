@@ -41,18 +41,23 @@ def build(path):
     help="Remove existing directories that may interfere with the initialization",
 )
 @click.option(
+    "--quick",
+    "-q",
+    default=False,
+    is_flag=True,
+    help="Skip the configuration prompts and use the default values"
+)
+@click.option(
     "--path",
     "-p",
     default="",
     help="The PATH to initialize the project. Defaults to ./",
 )
-def init(force, path):
+def init(force, path, quick):
     """Initialize a new project in PATH"""
-    click.secho("Attemping to initialize a new project", fg="blue")
-
     from ginpar.init import init as ginpar_init
 
-    ginpar_init(force, path)
+    ginpar_init(force, path, quick)
 
 
 @cli.command()
