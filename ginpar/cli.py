@@ -1,3 +1,10 @@
+"""
+    ginpar.cli
+    ~~~~~~~~~~
+
+    Implements the command line application to manage ginpar projects.
+"""
+
 import click
 
 
@@ -18,9 +25,13 @@ def cli():
     type=click.Path(),
     help="The PATH for the generated site.\nDefault = public",
 )
-def build(dir):
+def build(path):
     """Build a static website in PATH"""
     click.secho("Attemping to build the project", fg="blue")
+
+    from ginpar.build import build as ginpar_build
+
+    ginpar_build(path)
 
 
 @cli.command()
@@ -41,6 +52,10 @@ def init(force, path):
     """Initialize a new project in PATH"""
     click.secho("Attemping to initialize a new project", fg="blue")
 
+    from ginpar.init import init as ginpar_init
+
+    ginpar_init(force, path)
+
 
 @cli.command()
 @click.argument("sketch", default="new-sketch")
@@ -54,6 +69,10 @@ def init(force, path):
 def new(sketch, path):
     """Create a new SKETCH in PATH"""
     click.secho(f"Attemping to create `{sketch}` in `{path}/`", fg="blue")
+
+    from ginpar.new import new as ginpar_new
+
+    ginpar_new(sketch, path)
 
 
 @cli.command()
@@ -71,12 +90,20 @@ def quickstart(force, path):
     """Load a working example in PATH"""
     click.secho(f"Attemping to copy ginpar demo content in `{path}/`", fg="blue")
 
+    from ginpar.quickstart import quickstart as ginpar_quickstart
+
+    ginpar_quickstart(force, path)
+
 
 @cli.command()
 @click.option("--port", "-p", default="8080", help="Port for the web server")
 def serve(port):
     """Serve the content using PORT"""
     click.secho(f"Trying to initialize a server on port {port}", fg="blue")
+
+    from ginpar.serve import serve as ginpar_serve
+
+    ginpar_serve(port)
 
 
 if __name__ == "__main__":
