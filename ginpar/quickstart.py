@@ -11,6 +11,8 @@ import sys
 
 from jinja2 import Environment, FileSystemLoader
 
+from ginpar.utils import alert, success, error, info, echo
+
 import click
 
 
@@ -25,89 +27,77 @@ _SKETCHES_DIR = os.path.join(
 _jinja_env = Environment(loader=FileSystemLoader(_TEMPLATES_DIR), trim_blocks=True)
 
 
-def argv_to_flag_dict(argv):
-    """Take an arguments vector and convert it into a dictionary"""
-    possible_args = ["--force"]
-    flags = {}
-    for arg in possible_args:
-        if arg in argv:
-            flags[arg] = True
-    return flags
-
-
 def create_folder(folder):
-    print(f"Creating `{folder}`:", end="\n\t")
+    echo(f"    > Creating `{folder}`:")
     try:
         os.mkdir(folder)
     except FileExistsError:
-        print(f"Failure. It already exists.")
+        error("    Failure. It already exists.")
     except:
-        print(f"Failure.")
+        error("    Failure.")
     else:
-        print(f"Sucess")
+        success("    Sucess")
 
 
 def init_config():
-    print("\nCreating `config.json` using template:", end="\n\t")
+    click.secho("\n  > Creating `config.json` using template:")
     try:
         config = open("config.json", "r")
     except:
         try:
             config = open("config.json", "w+")
         except:
-            print("Failure.")
+            error("    Failure.")
         else:
             _template = _jinja_env.get_template("config.json.jinja2")
             config.write(_template.render())
             config.close()
-            print("Success.")
+            success("    Success.")
     else:
-        print("Failure. It already exists.")
+        error("    Failure. It already exists.")
 
 
 def copy_folder(fr, to):
-    print(f"\nCopying `{to}` from `{fr}`:", end="\n\t")
+    echo(f"\n  > Copying `{to}` from `{fr}`:")
     try:
         shutil.copytree(fr, to)
     except FileExistsError:
-        print(f"Failure. It already exists.")
+        error(f"    Failure. It already exists.")
     else:
-        print(f"Success.")
+        success(f"    Success.")
 
 
 def try_remove(path):
     if os.path.isdir(path):
-        print(f"`{path}` already exists. Attemping removal:", end="\n\t")
+        echo(f"\n  > `{path}` already exists. Attemping removal:")
         try:
             shutil.rmtree(path)
         except:
-            print(f"Failure. Restart or delete manually.")
+            error("    Failure. Restart or delete manually.")
         else:
-            print(f"Success.")
+            success("    Success.")
     elif os.path.isfile(path):
-        print(f"`{path}` already exists. Attemping removal:", end="\n\t")
+        echo(f"\n  > `{path}` already exists. Attemping removal:")
         try:
             os.remove(path)
         except:
-            print(f"Failure. Restart or delete manually.")
+            error(f"    Failure. Restart or delete manually.")
         else:
-            print(f"Success.")
+            success(f"    Success.")
     else:
-        print(f"`{path}` doesn't exist. Skipping.")
+        info(f"    > `{path}` doesn't exist. Skipping.")
 
 
 def quickstart(force, path):
-    click.secho("You're quickstarting", fg="blue")
-
+    echo("")
     if force:
-        click.echo(
-            "\n---\nForcing quickstart. This will replace existent directories and files.\n---\n"
-        )
+        alert("Forcing quickstart. This will replace existent directories and files.")
         try_remove("sketches")
         try_remove("themes")
         try_remove("config.json")
+        echo("")
 
-    print("\n---\nInitializing the project with default values\n---\n")
+    info(f"Copying demo content into `{os.path.abspath(path)}`")
     copy_folder(_THEMES_DIR, "themes")
     copy_folder(_SKETCHES_DIR, "sketches")
     init_config()

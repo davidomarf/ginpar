@@ -14,8 +14,11 @@ def unkebab(s):
 
 # ------------------------------ Throw messages ------------------------------ #
 
+def echo(m):
+    click.echo(m)
+
 def info(m):
-    click.secho(m)
+    click.secho(m, fg="blue")
 
 def success(m):
     click.secho(m, fg="green")

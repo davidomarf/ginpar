@@ -84,12 +84,10 @@ def new(sketch, path):
     help="Remove existing directories that may interfere the quickstart",
 )
 @click.option(
-    "--path", "-p", default="", help="The path the demo content will be copied to."
+    "--path", "-p", default="./", help="The path the demo content will be copied to."
 )
 def quickstart(force, path):
     """Load a working example in PATH"""
-    click.secho(f"Attemping to copy ginpar demo content in `{path}/`", fg="blue")
-
     from ginpar.quickstart import quickstart as ginpar_quickstart
 
     ginpar_quickstart(force, path)
