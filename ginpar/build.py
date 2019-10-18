@@ -14,7 +14,8 @@ from jinja2 import Environment, FileSystemLoader
 from ginpar.settings import read_config
 import ginpar.generators as gg
 
-from ginpar.utils import unkebab, echo, success
+from ginpar.utils.echo import echo, success
+from ginpar.utils.strings import unkebab
 
 import click
 
