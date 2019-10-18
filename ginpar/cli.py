@@ -27,8 +27,6 @@ def cli():
 )
 def build(path):
     """Build a static website in PATH"""
-    click.secho("Attemping to build the project", fg="blue")
-
     from ginpar.build import build as ginpar_build
 
     ginpar_build(path)
