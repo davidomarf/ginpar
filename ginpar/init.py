@@ -50,10 +50,7 @@ def init(force, path, quick):
     if force:
         alert("You're forcing the initialization.")
         alert("This will replace any existent file relevant to the project.")
-        proceed = click.confirm("Do you want to proceed?")
-        if not proceed:
-            error("Initialization interrumpted by the user.")
-            return
+        click.confirm("Do you want to proceed?", abort=True)
 
     if quick:
         content_path = os.path.join("my-site", "sketches")
