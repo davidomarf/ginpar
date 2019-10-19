@@ -1,7 +1,7 @@
 import os
 import shutil
 import yaml
-import click 
+import click
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -65,6 +65,7 @@ def convert_information(sketch):
             print(exc)
     sketch["data"] = parsed_data
     return sketch
+
 
 def main():
     _SITE = read_config(_SITE_FILE)

@@ -3,8 +3,10 @@ import os
 
 from ginpar.utils.echo import echo, error, success, info
 
+
 def check_existence(path):
     return os.path.isfile(path) or os.path.isdir(path)
+
 
 def create_file(file, content):
     echo(f"> Creating `{file}`:")
@@ -24,7 +26,7 @@ def create_file(file, content):
         error("Failure. It already exists.")
 
 
-def create_folder(folder, force = False):
+def create_folder(folder, force=False):
     echo(f"> Creating `{folder}`:")
     try:
         os.makedirs(folder)
@@ -36,14 +38,14 @@ def create_folder(folder, force = False):
         success("Sucess")
 
 
-def copy_folder(fr, to, force = False):
+def copy_folder(fr, to, force=False):
     echo(f"\n> Copying `{to}` from `{fr}`:")
 
     exists = check_existence(to)
-    
+
     if exists and force:
         try_remove(to)
-    
+
     try:
         shutil.copytree(fr, to)
     except FileExistsError:

@@ -134,7 +134,6 @@ def render_sketch_page(path, s, site):
 
 
 def build(path):
-    echo("")
     create_publishing_directory(path)
     echo(f"Building in `{os.path.abspath(path)}`")
 
@@ -152,5 +151,5 @@ def build(path):
     for s in sketches:
         echo(f"  Building {s['name']}")
         render_sketch_page(path, s, _SITE)
-    
+
     success("Success.")

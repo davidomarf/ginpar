@@ -47,7 +47,6 @@ def init_config():
 
 
 def quickstart(force, path):
-    echo("")
     if force:
         alert("Forcing quickstart. This will replace existent directories and files.")
         try_remove("sketches")
@@ -58,4 +57,4 @@ def quickstart(force, path):
     info(f"Copying demo content into `{os.path.abspath(path)}`")
     copy_folder(_THEMES_DIR, "themes")
     copy_folder(_SKETCHES_DIR, "sketches")
-    init_config() # FIXME Use a copy_file or render_file option imported from utils instead
+    init_config()  # FIXME Use a copy_file or render_file option imported from utils instead

@@ -83,4 +83,3 @@ def init(force, path, quick):
     success(
         "Done!\nRun `ginpar serve` or `ginpar build` and see your new site in action!\n"
     )
-
