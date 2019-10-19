@@ -1,6 +1,13 @@
-# Ginpar 
+# Ginpar
+
 [![PyPI](https://img.shields.io/pypi/v/ginpar)](https://pypi.org/project/ginpar/)
 [![Build](https://github.com/davidomarf/ginpar/workflows/build/badge.svg)](https://github.com/davidomarf/ginpar/actions?workflow=build)
+
+---
+
+**Ginpar is, and will be unstable until we don't release a v1.0.0.**
+
+---
 
 Ginpar is a **static website generator** for interactive P5.js sketches,
 awkwardly named after **Generative Interactive Parametrisable Canvases**.
@@ -20,9 +27,10 @@ Ginpar aims to generate portfolios for generative artists.
   - [tl;dr](#tldr)
   - [Installing](#Installing)
   - [Initializing](#initializing)
-  - [Preparing sketches](#preparing-sketches)
-    - [Specifying parameters](#specifying-parameters)
-    - [Assigning variables to corresponding values](#assigning-variables-to-corresponding-values)
+  - [Quickstarting](#quickstarting)
+  - [Creating sketch files](#creating-sketch-files)
+    - [sketch.js](#sketchjs)
+    - [data.yaml](#datayaml)
   - [Building](#building)
   - [Deploying](#Deploying)
     - [Netlify](#netlify)
@@ -36,17 +44,22 @@ Ginpar aims to generate portfolios for generative artists.
 ### tl;dr:
 
 1. Install
-    ```sh
-    $ pip install ginpar
-    ```
-1. Initialize
-    ```sh
-    $ ginpar-quickstart
-    ```
+   ```sh
+   $ pip install ginpar
+   ```
+1. Initialize a new project
+   ```sh
+   $ ginpar init
+   ```
 1. Build
-    ```sh
-    $ ginpar
-    ```
+   ```sh
+   $ ginpar build
+   ```
+
+Alternatively to `init`, you can use `quickstart` and import a working example
+automatically.
+
+Use `ginpar --help` to see a list of commands and options for each one.
 
 ### Installing
 
@@ -58,157 +71,154 @@ $ pip install ginpar
 
 ### Initializing
 
-Ginpar has a quickstart project that imports a theme with `jinja2` templates,
-an example sketch, and an initial configuration file `config.py`:
+```sh
+$ ginpar init
+```
+
+Ginpar will prompt you for the variables of your site, such as `name`,
+`description`, `author`, etc.
+
+This will create a new directory under the name you specified for `name`.
+
+Available flags:
+
+- `--quick, -q`: Skip the prompt and load the default values
+- `--force, -f`: If there's a directory with the same name, remove it.
+
+### Quickstarting
 
 ```sh
 $ ginpar-quickstart
 ```
 
-### Preparing sketches
+Ginpar includes a working example so you can modify its contents, and learn
+how to set your own projects if current docs are not enough (they're not).
 
-To use an existing sketch, you need to add some constants and functions with
-tight restrictions.
+Available flags:
 
-We suggest to check some [examples][examples].
+- `--force, -f`: If there's a directory with the same name, remove it.
 
-#### Specifying parameters
+### Creating sketch files
 
-First you need to specify the parameters that will be controllable in the
-sketch page. To do that, you must:
+Every directory inside the `sketches/` folder will be considered a sketch if
+it contains:
 
-1. Declare a variable with a string containing **JSON valid syntax** that also
-complies with [Ginpar API](#api).
-1. Enclose the declaration with the delimiters `/* ##ginpar */`
+- `sketch.js`
+- `data.yaml`
 
-```js
-/* ##ginpar */
-const paramsJSON = `[
-  {
-    "var": "WIDTH",
-    "attrs": {
-      "type": "number",
-      "value": 2048,
-      "min": 0,
-      "max": 4096
-    }
-  },
-  {
-    "var": "HEIGHT",
-    "attrs": {
-      "type": "number",
-      "value": 2560,
-      "min": 0,
-      "max": 5120
-    }
-  },
-  {
-    "var": "STOP_ODDS",
-    "attrs": {
-      "type": "range",
-      "value": 0.8,
-      "step": 0.001,
-      "min": 0,
-      "max": 1
-    }
-  }]`
-/* ##ginpar */
+For example, for a sketch named `rectangle`, you'd need this file structure:
+
+```
+sketches/
+  |- rectangle/
+      |- sketch.js
+      |- data.yaml
 ```
 
-It's necessary, as for the current version, to only include one declaration
-between the delimiters. Ginpar relies on this to obtain the JSON string.
+#### sketch.js
 
-#### Assigning variables to corresponding values
+This is the script for the sketch. The only modifications you need to do to
+be able to use ginpar are:
 
-This is optional, since Ginpar will automatically generate the JS script that
-fetches the values of the form and assign it to the variables. 
+- Add a `.parent("artwork-container")` to the `createCanvas` instruction.
 
-However, following this step will allow you to keep using the sketch script
-without needing to use Ginpar.
+#### data.yaml
 
-To do this, declare a new function that converts the `paramsJSON` string back
-into variables:
+The `data.yaml` file will contain the list of variables that you'll be able to
+control in the final sketch page.
 
-```js
-function jsonToVars(json){
-  return Object.assign(...json.map(e => {return {[e.var]: e.attrs.value}}))
-}
+The structure is this:
+
+```yaml
+---
+# The name of the variable to control in your sketch.js file
+- var: NUMBER_OF_POINTS 
+  # Valid HTML input attributes, or ones that fit our API
+  attrs: 
+    type: number 
+    value: 30
+    step: 1
+- var: SOME_RATIO
+  # You can specify a custom name to display in the HTML form
+  name: Minimum column height factor 
+  attrs:
+    type: range
+    value: 0.1
+    step: 0.01
+    # These are all valid HTML attributes
+    min: 0 
+    max: 1
 ```
 
-And re-write the declarations of the original variables like this:
+Ginpar will automatically produce the HTML forms, and the scripts to update the
+script variables everytime the input values change.
 
-```js
-const {
-  WIDTH,
-  HEIGHT,
-  // Any other constant you declared in paramsJSON
-  STOP_ODDS } = jsonToVars(JSON.parse(paramsJSON))
-```
+You don't need to declare these values in your JS file, but you can do it. If
+you decide to, **declare them with either `let` or `var`, not with `const`.**
 
-Note that for this to work, the constant symbol (e.g. `WIDTH`) **must** be
-equal to the value of `var` in the JSON array 
-(e. g. `{"var": "WIDTH", "attrs": {...}}`).
-
-## Building
+### Building
 
 To build, simply run:
 
 ```sh
-ginpar
+ginpar build
 ```
 
----
-
-The building process consists of:
-
-- Making a `public/` directory.
-- Reading the `config.json` file (this consists of, among other things, the
-author info, the Ginpar theme, and the website url).
-- Copying the static content of the selected theme into `public/`
-- Listing the contents of `sketches/`, and using the ones with `.js` 
-extension to:
-  - Make a directory `public/filename/` that contains a generated `index.html`
-    and `sketch.js`.
-  - Create a `public/index.html` file that adds `a` tags for every `filename`.
-
-If you want to quickstart a project, read [initializing](#initializing).
-
-## Deploying
+### Deploying
 
 For now, we've only deployed in Netlify. However, using any other server
 to deliver static content should be easy.
 
 ### Netlify
 
-How to deploy to Netlify
+You need to specify:
+
+- the python version to run
+  ```sh
+  $ echo "3.7" > runtime.txt
+  ```
+- add `ginpar` as dependency
+  ```sh
+  $ echo "ginpar" > requirements.txt
+  ```
+- tell Netlify how to build
+  ```sh
+  $ echo -e "[build]\n  command = \"ginpar build\"\n  publish = \"public\"" > netlify.toml
+  ```
+
+Then just make a deployment and you'll be ready to go.
+
+To see a site in production, check [gen.algorithms][algo]
 
 ## Built With
 
-* [Jinja2][jinja] - Templating language for Python.
-
+- [Jinja2][jinja] - Templating language.
+- [Click][click] - CLI Tool composer.
 ## Versioning
 
 We use [SemVer][semver] for versioning. For the versions
-available, see the 
-[tags on this repository](https://github.com/davidomarf/ginpar/tags). 
+available, see the
+[tags on this repository](https://github.com/davidomarf/ginpar/tags).
 
 ## Contributors
 
-* **David Omar** - *Initial work* - 
-[davidomarf](https://github.com/davidomarf)
+- **David Omar** - _Initial work_ -
+  [davidomarf](https://github.com/davidomarf)
 
-See also the list of 
+See also the list of
 [contributors](https://github.com/davidomarf/ginpar/contributors)
 who participated in this project.
 
 ## License
 
-This project is licensed under the MIT License - see the 
+This project is licensed under the MIT License - see the
 [LICENSE.md](LICENSE) file for details
 
-[semver]:semver.org
+[semver]: semver.org
 [examples]: examples
-[config-example]:config-example
-[params-api]:params-api
-[jinja]:https://jinja.palletsprojects.com/
-[pelican]:https://getpelican.com
+[config-example]: config-example
+[params-api]: params-api
+[jinja]: https://jinja.palletsprojects.com/
+[click]: https://click.palletsprojects.com/
+[pelican]: https://getpelican.com
+[algo]: https://github.com/davidomarf/gen.algorithms

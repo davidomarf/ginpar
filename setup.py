@@ -1,15 +1,14 @@
 import setuptools
 
-version = '0.2.0'
+version = '0.5.0'
 
-requires = ['jinja2 >= 2.7', 'pyyaml']
+requires = ['jinja2 >= 2.7', 'pyyaml', 'click']
 
 setup_requires = ['wheel']
 
 entry_points = {
     'console_scripts': [
-        'ginpar = ginpar.__main__:main',
-        'ginpar-quickstart = ginpar.tools.quickstart:main',
+        'ginpar = ginpar.cli:cli',
     ]
 }
 
