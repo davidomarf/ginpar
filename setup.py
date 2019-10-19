@@ -1,6 +1,6 @@
 import setuptools
 
-version = '0.4.0'
+version = '0.5.0'
 
 requires = ['jinja2 >= 2.7', 'pyyaml', 'click']
 
