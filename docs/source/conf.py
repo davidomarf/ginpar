@@ -39,6 +39,9 @@ extensions = [
      "sphinx.ext.autosectionlabel",
 ]
 
+master_doc = 'index'
+
+
 autosectionlabel_prefix_document = True
 
 # Add any paths that contain templates here, relative to this directory.
