@@ -2,6 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/ginpar)](https://pypi.org/project/ginpar/)
 [![Build](https://github.com/davidomarf/ginpar/workflows/build/badge.svg)](https://github.com/davidomarf/ginpar/actions?workflow=build)
+[![Documentation Status](https://readthedocs.org/projects/ginpar/badge/?version=stable)](https://ginpar.readthedocs.io/?badge=stable)
 
 ---
 
