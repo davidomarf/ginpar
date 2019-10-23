@@ -12,13 +12,13 @@ To initialize a project in a standard way to specify the configuration values::
 
     ginpar init
 
-To skip the prompts and initialize the project with the default values:
+To skip the prompts and initialize the project with the default values::
 
     ginpar init --quick
     ginpar init --q
 
 To force the initialization in case there is a directory with the same name
-of the project to initialize: 
+of the project to initialize::
 
     ginpar force --force
     ginpar force -f
