@@ -1,8 +1,14 @@
-"""
-    ginpar.cli
-    ~~~~~~~~~~
+"""Definition of the CLI commands for Ginpar.
 
-    Implements the command line application to manage ginpar projects.
+This module defines the different commands available for the ginpar static
+content generator.
+
+Examples
+--------
+
+To get the list of available commands and options run::
+
+    ginpar
 """
 
 import click
