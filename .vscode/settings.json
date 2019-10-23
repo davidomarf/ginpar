@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/home/d/.local/share/virtualenvs/ginpar-rqgfLzln/bin/python"
+    "python.pythonPath": "/home/d/dev/ginpar/venv/bin/python3.7",
+    "python.formatting.provider": "black"
 }   

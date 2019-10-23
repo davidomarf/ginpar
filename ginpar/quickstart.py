@@ -1,20 +1,37 @@
-"""
-    ginpar.quickstart
-    ~~~~~~~~~~~~~~~~~
+"""Quickstart command for Ginpar projects.
 
-    Implements the importing of demo content into a new project.
+This module implements the quickstart command for the ginpar static content
+generator.
+
+`quickstart` will download the contents of the sample repository hosted at
+`davidomarf/ginpar-quickstart <https://github.com/davidomarf/ginpar-quickstart>`_
+into `./quickstart`.
+
+This is aimed to provide an easier and faster way to start working in a Ginpar
+project for people who isn't familiar with static content generators.
+
+Example
+-------
+
+To create `./quickstart` and copy the contents of the sample repository::
+
+    ginpar quickstart
+
+If there's another directory named `quickstart`, you can force this command,
+removing the existing directory::
+
+    ginpar build --path="_site"
 """
 import os
 import shutil
 from pathlib import Path
 import sys
 
+import click
 from jinja2 import Environment, FileSystemLoader
 
 from ginpar.utils.echo import alert, success, error, info, echo
 from ginpar.utils.files import try_remove, copy_folder
-
-import click
 
 
 _TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
@@ -29,6 +46,7 @@ _jinja_env = Environment(loader=FileSystemLoader(_TEMPLATES_DIR), trim_blocks=Tr
 
 
 def init_config():
+    # TODO: Deprecate this function and clone sample repo instead
     click.secho("\n> Creating `config.json` using template:")
     try:
         config = open("config.json", "r")
@@ -47,15 +65,23 @@ def init_config():
 
 
 def quickstart(force):
+    """Main function of the module. This is what `ginpar quickstart` calls.
+
+    Parameters
+    ----------
+    force : bool
+        Remove conflicting files when true.
+    """
+
     path = "ginpar-quickstart"
-    
+
     if force:
         alert("Forcing quickstart. This will replace existent directories and files.")
         try_remove("sketches")
         try_remove("themes")
         try_remove("config.json")
         echo("")
-    
+
     info(f"Copying demo content into `{os.path.abspath(path)}`")
     copy_folder(_THEMES_DIR, "themes")
     copy_folder(_SKETCHES_DIR, "sketches")
