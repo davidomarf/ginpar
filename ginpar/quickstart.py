@@ -20,49 +20,60 @@ To create `./quickstart` and copy the contents of the sample repository::
 If there's another directory named `quickstart`, you can force this command,
 removing the existing directory::
 
-    ginpar build --path="_site"
+    ginpar quickstart --force
+    ginpar quickstart -f
 """
 import os
-import shutil
-from pathlib import Path
-import sys
+import subprocess
 
-import click
-from jinja2 import Environment, FileSystemLoader
-
-from ginpar.utils.echo import alert, success, error, info, echo
-from ginpar.utils.files import try_remove, copy_folder
+from ginpar.utils.echo import success, alert, echo, error
+from ginpar.utils.files import try_remove
 
 
-_TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
+def clone_repo(repo, path):
+    """Clone the contents of a repository in a custom path
 
-_THEMES_DIR = os.path.join(Path(os.path.dirname(os.path.abspath(__file__))), "themes")
+    Parameters
+    ----------
+    repo : str
+        GitHub repository as in "{USER}/{REPO}"
+    path : str
+        Path to clone the repository to
+    """
 
-_SKETCHES_DIR = os.path.join(
-    Path(os.path.dirname(os.path.abspath(__file__))), "sketches"
-)
+    repo_url = f"https://github.com/{repo}.git"
 
-_jinja_env = Environment(loader=FileSystemLoader(_TEMPLATES_DIR), trim_blocks=True)
-
-
-def init_config():
-    # TODO: Deprecate this function and clone sample repo instead
-    click.secho("\n> Creating `config.json` using template:")
+    echo(f"> Cloning {repo} in `{path}`")
     try:
-        config = open("config.json", "r")
-    except:
-        try:
-            config = open("config.json", "w+")
-        except:
-            error("Failure.")
-        else:
-            _template = _jinja_env.get_template("config.json.jinja2")
-            config.write(_template.render())
-            config.close()
-            success("Success.")
-    else:
-        error("Failure. It already exists.")
+        subprocess.call(["git", "clone", repo_url, path, "--quiet"])
+    except OSError:
+        error("You don't have git installed in your machine.")
+        echo("Please install git and rerun or download the files manually:")
+        echo(f"\t{repo_url}")
+        return 1
 
+    success(f"Successfully cloned {repo}.\n")
+    return 0
+
+
+def delete_git_files(path):
+    """Delete the git files to only keep the relevant files
+
+    Parameters
+    ----------
+    path : str
+        Path to look for git files
+    """
+
+    echo("> Deleting .git files")
+    try:
+        subprocess.call(["rm", os.path.join(path, ".git"), "-rf"])
+        success("Successfully deleted .git files")
+    except:
+        error(f"Couldn't delete files. Delete all .git files manually in `{path}`")
+        return 1
+
+    return 0
 
 def quickstart(force):
     """Main function of the module. This is what `ginpar quickstart` calls.
@@ -73,16 +84,22 @@ def quickstart(force):
         Remove conflicting files when true.
     """
 
-    path = "ginpar-quickstart"
+    repo = "davidomarf/ginpar-quickstart"
+    path = os.path.abspath("quickstart")
 
     if force:
-        alert("Forcing quickstart. This will replace existent directories and files.")
-        try_remove("sketches")
-        try_remove("themes")
-        try_remove("config.json")
+        alert("Forcing quickstart. This will replace existent directories and files.\n")
+        try_remove("quickstart")
         echo("")
 
-    info(f"Copying demo content into `{os.path.abspath(path)}`")
-    copy_folder(_THEMES_DIR, "themes")
-    copy_folder(_SKETCHES_DIR, "sketches")
-    init_config()  # FIXME Use a copy_file or render_file option imported from utils instead
+    if os.path.isdir(path):
+        error(f"`{path}` already exists.")
+        echo("Delete it manually or run `ginpar quickstart -f` to force")
+        return
+
+    if clone_repo(repo, path) == 0:
+        if delete_git_files(path) == 0:
+            echo(f"\nThe Ginpar sample site is ready.\n")
+            echo("Run `cd quickstart` to move to the project directory.")
+            echo("Then run `ginpar build` or `ginpar serve` to see it working.")
+    
