@@ -39,14 +39,6 @@ from ginpar.utils.strings import unkebab
 
 import click
 
-_SITE_FILE = "config.json"
-_SITE = read_config(_SITE_FILE)
-_THEME = _SITE["theme"]
-_TEMPLATES_PATH = os.path.join("themes", _THEME, "templates")
-_SKETCHES_PATH = _SITE["content_path"]
-_jinja_env = Environment(loader=FileSystemLoader(_TEMPLATES_PATH), trim_blocks=True)
-_jinja_env.filters["unkebab"] = unkebab
-
 
 def get_sketches(content_path):
     """Obtain the list of **valid** sketches inside `path`.
@@ -150,7 +142,7 @@ def copy_theme(build_path, theme):
     )
 
 
-def render_index(build_path, sketches, site):
+def render_index(build_path, sketches, site, page_template):
     """Render the index using the list of sketches and site configuration
 
     The index is rendered using a Jinja2 template inside the theme `templates/`
@@ -169,22 +161,22 @@ def render_index(build_path, sketches, site):
     
     site : dict
         Contains the site information, such as `sitename` and `author`.
-    """
 
-    # Obtain the template
-    _index_template = _jinja_env.get_template("index.html")
+    page_template : Jinja2.Template
+        Jinja2 template to render the sketch.
+    """
 
     # Open the index in the build path for writing
     index = open(os.path.join(build_path, "index.html"), "w")
 
     # Write the contents of the rendered template into the index file
     index.write(
-        _index_template.render(sketches=map(lambda a: a["name"], sketches), site=site)
+        page_template.render(sketches=map(lambda a: a["name"], sketches), site=site)
     )
     index.close()
 
 
-def render_sketch_page(build_path, sketch, site):
+def render_sketch_page(build_path, sketch, site, page_template):
     """Render a sketch page
 
     This generates the page for a single sketch. This will convert the
@@ -211,9 +203,12 @@ def render_sketch_page(build_path, sketch, site):
 
     site : dict
         Site configuration.
+        
+    page_template : Jinja2.Template
+        Jinja2 template to render the sketch.
     """
     ## Create a directory with the sketch title
-    os.mkdir(os.path.join(build_path, sketch['name']))
+    os.mkdir(os.path.join(build_path, sketch["name"]))
 
     ## Convert the form JSON into a dict
     form_dict = sketch["data"]
@@ -222,11 +217,10 @@ def render_sketch_page(build_path, sketch, site):
     form_dict = gg.add_name(form_dict)
 
     ## Create index.html
-    _sketch_template = _jinja_env.get_template("sketch.html")
     sketch_index = open(f"public/{sketch['name']}/index.html", "w+")
     sketch_index.write(
-        _sketch_template.render(
-            sketch=unkebab(sketch["name"]), form=gg.sketch_index(form_dict), site=_SITE
+        page_template.render(
+            sketch=unkebab(sketch["name"]), form=gg.sketch_index(form_dict), site=site
         )
     )
     sketch_index.close()
@@ -255,6 +249,14 @@ def build(path):
         Path of the build.
     """
 
+    _SITE_FILE = "config.json"
+    _SITE = read_config(_SITE_FILE)
+    _THEME = _SITE["theme"]
+    _TEMPLATES_PATH = os.path.join("themes", _THEME, "templates")
+    _SKETCHES_PATH = _SITE["content_path"]
+    _jinja_env = Environment(loader=FileSystemLoader(_TEMPLATES_PATH), trim_blocks=True)
+    _jinja_env.filters["unkebab"] = unkebab
+
     create_publishing_directory(path)
     echo(f"Building in `{os.path.abspath(path)}`")
 
@@ -265,12 +267,12 @@ def build(path):
     sketches = list(get_sketches(_SKETCHES_PATH))
     echo(f"Found {len(sketches)} sketch(es)")
 
-    render_index(path, sketches, _SITE)
+    render_index(path, sketches, _SITE, _jinja_env.get_template("index.html"))
     echo("Building main page")
 
     echo("Building sketches:")
     for sketch in sketches:
         echo(f"  Building {sketch['name']}")
-        render_sketch_page(path, sketch, _SITE)
+        render_sketch_page(path, sketch, _SITE, _jinja_env.get_template("sketch.html"))
 
     success("Success.")
