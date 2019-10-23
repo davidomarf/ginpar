@@ -20,8 +20,8 @@ To skip the prompts and initialize the project with the default values::
 To force the initialization in case there is a directory with the same name
 of the project to initialize::
 
-    ginpar force --force
-    ginpar force -f
+    ginpar init --force
+    ginpar init -f
 """
 
 import os
