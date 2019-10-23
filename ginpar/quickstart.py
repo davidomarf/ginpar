@@ -46,14 +46,16 @@ def init_config():
         error("Failure. It already exists.")
 
 
-def quickstart(force, path):
+def quickstart(force):
+    path = "ginpar-quickstart"
+    
     if force:
         alert("Forcing quickstart. This will replace existent directories and files.")
         try_remove("sketches")
         try_remove("themes")
         try_remove("config.json")
         echo("")
-
+    
     info(f"Copying demo content into `{os.path.abspath(path)}`")
     copy_folder(_THEMES_DIR, "themes")
     copy_folder(_SKETCHES_DIR, "sketches")

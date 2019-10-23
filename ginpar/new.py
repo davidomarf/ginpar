@@ -7,5 +7,5 @@
 import click
 
 
-def new(sketch, path):
+def new(sketch):
     click.secho("You're in new", fg="blue")

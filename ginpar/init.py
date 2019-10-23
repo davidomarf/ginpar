@@ -43,7 +43,7 @@ def prompt_site_config():
     }
 
 
-def init(force, path, quick):
+def init(force, quick):
     """"""
     _config_template = _jinja_env.get_template("config.json.jinja2")
 
