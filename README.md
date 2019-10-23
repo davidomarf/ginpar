@@ -281,6 +281,8 @@ need to:
 
 - [Jinja2][jinja] - Templating language.
 - [Click][click] - CLI Tool composer.
+- [PyYAML][pyyaml] - YAML framework.
+
 ## Versioning
 
 We use [SemVer][semver] for versioning. For the versions
@@ -315,3 +317,4 @@ This project is licensed under the MIT License - see the
 [ginpar-build]: https://ginpar.readthedocs.io/en/latest/cli.html#ginpar-build
 [ginpar-init]: https://ginpar.readthedocs.io/en/latest/cli.html#ginpar-init
 [ginpar-new]: https://ginpar.readthedocs.io/en/latest/cli.html#ginpar-new
+[pyyaml]:https://pyyaml.org
