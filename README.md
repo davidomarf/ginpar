@@ -25,7 +25,7 @@ Features:
 - Easy replicability of each final result.
 - Index page to list all your sketches.
 
-The following Introduction is part of the [Ginpar Documentation][g-docs] and
+The following Introduction is part of the [Ginpar Documentation][ginpar-docs] and
 may be read at [Introduction][docs-intro]
 
 ## Table of contents
