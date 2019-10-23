@@ -55,7 +55,7 @@ If you're new to static content generators, this may be the best way to start.
 This will create the following directory structure::
 
     .
-    ├── config.json
+    ├── config.yaml
     ├── sketches/
     │   └── domino-dancing/
     │       ├── sketch.js

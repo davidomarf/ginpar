@@ -32,7 +32,6 @@ import yaml
 import click
 from jinja2 import Environment, FileSystemLoader
 
-from ginpar.settings import read_config
 import ginpar.generators as gg
 from ginpar.utils.echo import echo, success
 from ginpar.utils.strings import unkebab
@@ -239,6 +238,21 @@ def render_sketch_page(build_path, sketch, site, page_template):
     sf.close()
     sketch_script.close()
 
+def read_config(path):
+    """Create a dictionary out of the YAML file received
+
+    Paremeters
+    ----------
+    path : str
+        Path of the YAML file.
+    """
+    with open(path, "r") as stream:
+        try:
+            config = yaml.safe_load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
+    return config
+
 
 def build(path):
     """Main function of the module. This is what `ginpar build` calls.
@@ -249,7 +263,7 @@ def build(path):
         Path of the build.
     """
 
-    _SITE_FILE = "config.json"
+    _SITE_FILE = "config.yaml"
     _SITE = read_config(_SITE_FILE)
     _THEME = _SITE["theme"]
     _TEMPLATES_PATH = os.path.join("themes", _THEME, "templates")
