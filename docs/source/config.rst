@@ -100,7 +100,7 @@ Here you'll add the same content you'd otherwise manually add to every sketch
 in your project.
 
 For example, if you'd like all your sketches to **not allow a global_seed**,
-you'd need to add this to your config.json file:
+you'd need to add this to your config.yaml file:
 
 .. code-block:: YAML
 
