@@ -26,6 +26,8 @@ removing the existing directory::
 import os
 import subprocess
 
+import click
+
 from ginpar.utils.echo import success, alert, echo, error
 from ginpar.utils.files import try_remove
 
@@ -75,6 +77,7 @@ def delete_git_files(path):
 
     return 0
 
+
 def quickstart(force):
     """Main function of the module. This is what `ginpar quickstart` calls.
 
@@ -95,11 +98,12 @@ def quickstart(force):
     if os.path.isdir(path):
         error(f"`{path}` already exists.")
         echo("Delete it manually or run `ginpar quickstart -f` to force")
-        return
+        raise click.Abort()
 
     if clone_repo(repo, path) == 0:
         if delete_git_files(path) == 0:
             echo(f"\nThe Ginpar sample site is ready.\n")
             echo("Run `cd quickstart` to move to the project directory.")
             echo("Then run `ginpar build` or `ginpar serve` to see it working.")
-    
+    else:
+        raise click.Abort()
