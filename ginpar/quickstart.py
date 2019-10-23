@@ -69,7 +69,7 @@ def delete_git_files(path):
 
     echo("> Deleting .git files")
     try:
-        subprocess.call(["rm", os.path.join(path, ".git"), "-rf"])
+        try_remove(os.path.join(path, ".git"))
         success("Successfully deleted .git files")
     except:
         error(f"Couldn't delete files. Delete all .git files manually in `{path}`")
