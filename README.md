@@ -10,186 +10,272 @@
 
 ---
 
-Ginpar is a **static website generator** for interactive P5.js sketches,
+Ginpar is a **static content generator** for interactive P5.js sketches,
 awkwardly named after **Generative Interactive Parametrisable Canvases**.
 
-Key features:
+By separating the primary development and the parametric experimentation,
+it allows you to stop thinking about code once your pieces have reached an
+acceptable level of complexity, freeing you to experiment in a GUI for the
+browser.
 
-- Generate an individual page for each sketch in your project.
-- Generate forms to control the parameters of the sketch on the go.
-- Specify what parameters from the sketch you want to control.
-- Generate an index page that links to every sketch.
+Features:
 
-Ginpar aims to generate portfolios for generative artists.
+- Simple API to define the controllable variables in your sketch.
+- Easy to adapt existing sketches.
+- Easy replicability of each final result.
+- Index page to list all your sketches.
 
-## Contents
+The following Introduction is part of the [Ginpar Documentation][g-docs] and
+may be read at [Introduction][docs-intro]
 
-- [How to use](#how-to-use)
-  - [tl;dr](#tldr)
-  - [Installing](#Installing)
-  - [Initializing](#initializing)
-  - [Quickstarting](#quickstarting)
-  - [Creating sketch files](#creating-sketch-files)
-    - [sketch.js](#sketchjs)
-    - [data.yaml](#datayaml)
-  - [Building](#building)
-  - [Deploying](#Deploying)
-    - [Netlify](#netlify)
-- [Built with](#built-with)
-- [Versioning](#Versioning)
-- [Contributors](#Contributors)
-- [License](#License)
+## Table of contents
 
-## How to use
+- [Introduction](#introduction)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+    - [Quickstart](#quickstart)
+    - [Initialization](#initialization)
+    - [Creating new sketches](#creating-new-sketches)
+    - [Adapting existing sketches](#adapting-existing-sketches)
+    - [Specifying the parameters](#specifying-the-parameters)
+    - [Serving & Building](#serving-&-building)
+    - [Deploying](#deploying)
+- [Build with](#built-with)
+- [Versioning](#versioning)
+- [Contributors](#contributors)
+- [License](#license)
 
-### tl;dr:
+## Introduction
 
-1. Install
-   ```sh
-   $ pip install ginpar
-   ```
-1. Initialize a new project
-   ```sh
-   $ ginpar init
-   ```
-1. Build
-   ```sh
-   $ ginpar build
-   ```
+This is a quick introductory documentation for the Ginpar static content
+generator.
 
-Alternatively to `init`, you can use `quickstart` and import a working example
-automatically.
+Ginpar works similarly to other engines such as Jekyll, Hugo, or Pelican, but
+with a narrower and deeper set of functionalities, since it's very specific in
+its task.
 
-Use `ginpar --help` to see a list of commands and options for each one.
+The two main objectives of Ginpar are:
 
-### Installing
+- Allowing artists to stop thinking about code when experimenting with the
+  parameters that control the results of the artwork, achieving a **quicker
+  feedback loop.**
 
-For now the only way to get ginpar running is by installing the PyPi package:
+- Making interactive websites to share the artist's work, letting users play
+  with the same GUI.
 
-```bash
-$ pip install ginpar
-```
+For a live example of a website built with Ginpar, check this example_.
 
-### Initializing
+### Prerequisites
 
-```sh
-$ ginpar init
-```
+For now Ginpar only runs using Python >= 3.6.
+Future versions will add compatibility with Python 2.
 
-Ginpar will prompt you for the variables of your site, such as `name`,
-`description`, `author`, etc.
+### Installation
 
-This will create a new directory under the name you specified for `name`.
+The easiest way to install the latest version of Ginpar is using pip:
 
-Available flags:
+    pip install ginpar
 
-- `--quick, -q`: Skip the prompt and load the default values
-- `--force, -f`: If there's a directory with the same name, remove it.
+To make sure it's installed and working, run:
 
-### Quickstarting
+    ginpar --version
 
-```sh
-$ ginpar-quickstart
-```
+### Quickstart
 
-Ginpar includes a working example so you can modify its contents, and learn
-how to set your own projects if current docs are not enough (they're not).
+Ginpar has an example project ready for installation, it contains the default
+project structure and a sketch example.
 
-Available flags:
+If you're new to static content generators, this may be the best way to start.
 
-- `--force, -f`: If there's a directory with the same name, remove it.
+    ginpar quickstart
 
-### Creating sketch files
+This will create the following directory structure::
 
-Every directory inside the `sketches/` folder will be considered a sketch if
-it contains:
+    .
+    ├── config.yaml
+    ├── sketches/
+    │   └── domino-dancing/
+    │       ├── sketch.js
+    │       └── data.yaml
+    └── themes/
+        └── gart
+            └── ...
 
-- `sketch.js`
-- `data.yaml`
+To open this project in your browser, run:
 
-For example, for a sketch named `rectangle`, you'd need this file structure:
+    ginpar serve
 
-```
-sketches/
-  |- rectangle/
-      |- sketch.js
-      |- data.yaml
-```
+Now, start modifying the contents of ``config.json`` and ``sketches/``.
 
-#### sketch.js
+Next, you should read [Creating new sketches](#creating-new-sketches),
+[Serving & Building](#serving-building), or [Deploying](#deploying).
 
-This is the script for the sketch. The only modifications you need to do to
-be able to use ginpar are:
+### Initialization
 
-- Add a `.parent("artwork-container")` to the `createCanvas` instruction.
+Alternatively, if you want to start a new project without importing anything
+extra, run:
 
-#### data.yaml
+    ginpar init
 
-The `data.yaml` file will contain the list of variables that you'll be able to
-control in the final sketch page.
+This will prompt you for the values to build your configuration file and then
+create the project using those values.
 
-The structure is this:
+With this command, you may configure things like the destination and source
+directories (``public`` and ``sketches`` by default).
 
-```yaml
+Check [ginpar init][ginpar-init] or run ``ginpar init --help`` for more
+information.
+
+### Creating new sketches
+
+Ginpar has a handy command to start new projects with some configuration
+already set:
+
+    ginpar new [SKETCH]
+
+This will create a new sketch inside your predefined source directory.
+You can set the name when running the command, but it's optional.
+
+Check [cli:ginpar new][ginpar-new] or run ``ginpar new --help`` for more
+information.
+
+Now, you must be [specifying the parameters](#specifying-the-parameters).
+
+### Adapting existing sketches
+
+For Ginpar to build the interactive page, you'll need to add some modifications
+to your sketch code.
+
+#### Adding it to the list of sketches
+
+First, make your sketch detectable for Ginpar:
+
+1. Create a directory ``my-sketch/`` inside ``sketches/``.
+1. Copy your existent sketch script inside ``my-sketch`` and rename it to
+   ``sketch.js``.
+1. Create a ``data.yaml`` file.
+
+You should end with a structure like this::
+
+    .
+    └── sketches/
+        └── my-sketch/
+            ├── sketch.js
+            └── data.yaml
+
+#### Making your sketch compatible with Ginpar
+
+In your ``createCanvas`` instruction, add ``.parent("artwork-container")``.
+
+Now, you must be [specifying the parameters](#specifying-the-parameters).
+
+### Specifying the parameters
+
+Each sketch is a directory that contains two files: ``sketch.js`` and
+``data.yaml``. The ``data.yaml`` file is where the parameters specification
+takes place.
+
+To create a parameters list, add this to your data file:
+
+ ```yaml
 ---
-# The name of the variable to control in your sketch.js file
-- var: NUMBER_OF_POINTS 
-  # Valid HTML input attributes, or ones that fit our API
-  attrs: 
-    type: number 
-    value: 30
-    step: 1
-- var: SOME_RATIO
-  # You can specify a custom name to display in the HTML form
-  name: Minimum column height factor 
-  attrs:
-    type: range
-    value: 0.1
-    step: 0.01
-    # These are all valid HTML attributes
-    min: 0 
-    max: 1
+# ... other data
+# ...
+
+# Key that contains a list of parameters
+params:
+
+  # The name of the parameter must be the key of the element
+  # It must match a variable in your sketch.js file
+  - MY_VARIABLE:
+
+      # Ginpar parameters definition keys. All optional.
+      # For a full list check the API
+      randomizable: True
+      name: My displayed variable name
+
+      # HTML valid attributes
+      attrs:
+        type: number
+        value: 30
+        step: 1
+        min: 0
+        max: 100
 ```
 
-Ginpar will automatically produce the HTML forms, and the scripts to update the
-script variables everytime the input values change.
+Once parsed, Ginpar will produce:
 
-You don't need to declare these values in your JS file, but you can do it. If
-you decide to, **declare them with either `let` or `var`, not with `const`.**
+- A form containing each of the items in the ``parameters`` list:
+    ```html
+      <form>
+        <div class="form-field">
+            <label for="my-variable">
+                My displayed variable name
+            </label>
+            <input name="my-variable"
+                    id="my-variable"
+                    type="number"
+                    value="30"
+                    step="1">
+          </div>
+        <!-- More form-fields. One for each params element. --->
+      </form>
+    ```
+    
+- A JS code fragment to update each of the parameters using the form values:
+    ```JS
 
-### Building
+      function updateVars() {
+        MY_VARIABLE = document.getElementByID("my-variable").value;
+        // More variable updates. One for each params element.
+      }
+    ```
 
-To build, simply run:
+---
 
-```sh
-ginpar build
+To use this parameters inside your sketch, just use the same name you used as
+key:
+
+```js
+console.log(MY_VARIABLE)
 ```
+
+### Serving & Building
+
+Ginpar has two different commands to build your site:
+
+  ginpar build
+
+Will build your site into the ``build_directory`` path, which by default is
+``public``.
+
+  ginpar serve
+
+Will start a new server on ``localhost:8000`` and open your default web
+browser. You can specify the port with ``--port``.
+
+Check [ginpar serve][ginpar-serve] and [ginpar build][ginpar-build], or run
+``ginpar serve --help``, ``ginpar build --help`` to see the full list of
+options and arguments available.
 
 ### Deploying
 
-For now, we've only deployed in Netlify. However, using any other server
-to deliver static content should be easy.
+Ginpar also has a command to create the deployment configuration files for
+Netlify. Future versions will also generate the configuration files for other
+deployments enviroments.
 
-### Netlify
+**This command won't deploy your site. It'll just create the config files**.
 
-You need to specify:
+For Netlify, this means creating ``requirements.txt``, ``runtime.txt``, and
+``netlify.toml``.
 
-- the python version to run
-  ```sh
-  $ echo "3.7" > runtime.txt
-  ```
-- add `ginpar` as dependency
-  ```sh
-  $ echo "ginpar" > requirements.txt
-  ```
-- tell Netlify how to build
-  ```sh
-  $ echo -e "[build]\n  command = \"ginpar build\"\n  publish = \"public\"" > netlify.toml
-  ```
+If you want to set the configuration files manually for other engines, you
+need to:
 
-Then just make a deployment and you'll be ready to go.
-
-To see a site in production, check [gen.algorithms][algo]
+- Specify the Python version to be above 3.6,
+- Add `ginpar` to the dependencies, usually in a ``requirements.txt`` file,
+- Make the deploy path the same as the :ref:`config:build_path`,
+- Set ``ginpar build`` as the build command.
 
 ## Built With
 
@@ -223,3 +309,9 @@ This project is licensed under the MIT License - see the
 [click]: https://click.palletsprojects.com/
 [pelican]: https://getpelican.com
 [algo]: https://github.com/davidomarf/gen.algorithms
+[ginpar-docs]: https://ginpar.readthedocs.io
+[docs-intro]: https://ginpar.readthedocs.io/en/latest/intro.html
+[ginpar-serve]: https://ginpar.readthedocs.io/en/latest/cli.html#ginpar-serve
+[ginpar-build]: https://ginpar.readthedocs.io/en/latest/cli.html#ginpar-build
+[ginpar-init]: https://ginpar.readthedocs.io/en/latest/cli.html#ginpar-init
+[ginpar-new]: https://ginpar.readthedocs.io/en/latest/cli.html#ginpar-new
