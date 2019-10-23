@@ -20,14 +20,12 @@ _jinja_env = Environment(loader=FileSystemLoader(_TEMPLATES_DIR), trim_blocks=Tr
 
 def prompt_site_config():
     info("Welcome to ginpar! We'll ask for some values to initialize your project.")
-    click.pause()
     echo("")
     sitename = click.prompt("Site name", default="My Site")
     description = click.prompt("Description", default="Cool site")
     author = click.prompt("Author", default="John Doe")
     url = click.prompt("url", default="johndoe.com")
     info("\nIf you're unsure about the next prompts, accept the defaults")
-    click.pause()
     echo("")
     theme = click.prompt("Theme", default="gart")
     content_path = click.prompt("Sketches path", default="sketches")
