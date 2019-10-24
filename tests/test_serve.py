@@ -8,6 +8,6 @@ def test_serve():
   with runner.isolated_filesystem():
       runner.invoke(cli, ["init", "-q"])
       os.chdir("my-site")
-      result = runner.invoke(cli, ["serve"])
+      result = runner.invoke(cli, ["serve", "--help"])
       assert result.exit_code == 0
   
