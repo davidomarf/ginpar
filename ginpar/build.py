@@ -35,6 +35,7 @@ from jinja2 import Environment, FileSystemLoader
 import ginpar.generators as gg
 from ginpar.utils.echo import echo, success
 from ginpar.utils.strings import unkebab
+from ginpar.utils.git import clone_repo, delete_git_files
 
 import click
 
@@ -238,6 +239,7 @@ def render_sketch_page(build_path, sketch, site, page_template):
     sf.close()
     sketch_script.close()
 
+
 def read_config(path):
     """Create a dictionary out of the YAML file received
 
@@ -265,11 +267,16 @@ def build(path):
 
     _SITE_FILE = "config.yaml"
     _SITE = read_config(_SITE_FILE)
-    _THEME = _SITE["theme"]
-    _TEMPLATES_PATH = os.path.join("themes", _THEME, "templates")
+    _THEME = _SITE["theme"].split("/")[1]
+    _THEME_PATH = os.path.join("themes", _THEME)
+    _TEMPLATES_PATH = os.path.join(_THEME_PATH, "templates")
     _SKETCHES_PATH = _SITE["content_path"]
     _jinja_env = Environment(loader=FileSystemLoader(_TEMPLATES_PATH), trim_blocks=True)
     _jinja_env.filters["unkebab"] = unkebab
+
+    if not os.path.isdir(_THEME_PATH):
+        clone_repo(_SITE["theme"], _THEME_PATH)
+        delete_git_files(_THEME_PATH)
 
     create_publishing_directory(path)
     echo(f"Building in `{os.path.abspath(path)}`")
