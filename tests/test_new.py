@@ -25,10 +25,7 @@ def test_new():
        
 
 def test_new_existent():
-    """New works properly on the default scenario.
-
-    Default scenario is when the directory of the new sketch doesn't
-    exist in the source_path..
+    """New works properly when the sketch already exists
     """
     runner = CliRunner()
     with runner.isolated_filesystem():
