@@ -20,7 +20,29 @@ To start a new sketch with the default name `new-sketch-{n}`::
 
     ginpar new
 """
-import click
+import os
+import yaml
+
+from jinja2 import Environment, FileSystemLoader
+
+from ginpar.utils.files import create_folder
+
+
+## TODO: Move read_config into a shared library inside utils
+def read_config(path):
+    """Create a dictionary out of the YAML file received
+
+    Paremeters
+    ----------
+    path : str
+        Path of the YAML file.
+    """
+    with open(path, "r") as stream:
+        try:
+            config = yaml.safe_load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
+    return config
 
 
 def new(sketch):
@@ -31,4 +53,24 @@ def new(sketch):
     sketch : str
         Name of the sketch to create
     """
-    click.secho("You're in new", fg="blue")
+
+    _SITE = "config.yaml"
+    site = read_config(_SITE)
+
+    path = os.path.join(site["content_path"], sketch)
+
+    _TEMPLATES_DIR = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "templates", "sketch"
+    )
+    _jinja_env = Environment(loader=FileSystemLoader(_TEMPLATES_DIR), trim_blocks=True)
+
+    create_folder(path)
+
+    with open(os.path.join(path, "sketch.js"), "w") as file:
+        sketch_template = _jinja_env.get_template("sketch.js")
+        file.write(sketch_template.render())
+
+    with open(os.path.join(path, "data.yaml"), "w") as file:
+        data_template = _jinja_env.get_template("data.yaml")
+        file.write(data_template.render())
+
