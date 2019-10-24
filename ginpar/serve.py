@@ -16,12 +16,6 @@ To start a new server in a custom port::
 
     ginpar serve --port=3000
     ginpar serve -p=3000
-
-To force the initialization in case there is a directory with the same name
-of the project to initialize::
-
-    ginpar force --force
-    ginpar force -f
 """
 import click
 
