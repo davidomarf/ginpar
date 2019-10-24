@@ -16,14 +16,27 @@ To start a new server in a custom port::
 
     ginpar serve --port=3000
     ginpar serve -p=3000
-
-To force the initialization in case there is a directory with the same name
-of the project to initialize::
-
-    ginpar force --force
-    ginpar force -f
 """
 import click
+import yaml
+from livereload import Server, shell
+
+
+## TODO: Move read_config into a shared library inside utils
+def read_config(path):
+    """Create a dictionary out of the YAML file received
+
+    Paremeters
+    ----------
+    path : str
+        Path of the YAML file.
+    """
+    with open(path, "r") as stream:
+        try:
+            config = yaml.safe_load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
+    return config
 
 
 def serve(port):
@@ -34,4 +47,9 @@ def serve(port):
     port : int
         The port of the server
     """
-    click.secho("You're serving", fg="blue")
+    site = read_config("config.yaml")
+
+    server = Server()
+
+    server.watch(site["content_path"], 'ginpar build')
+    server.serve(port=port, root=site["build_path"])
