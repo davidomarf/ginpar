@@ -5,11 +5,16 @@ verify_ssl = true
 
 [dev-packages]
 pylint = "*"
+black = "*"
 
 [packages]
 Jinja2 = "*"
 PyYAML = "*"
 click = "*"
+livereload = "*"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true

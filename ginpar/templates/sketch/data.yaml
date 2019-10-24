@@ -1,0 +1,7 @@
+---
+- var: DIMENSIONS
+  attrs:
+    type: dimensions
+    value: 
+      - 2048
+      - 2048
