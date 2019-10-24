@@ -55,7 +55,7 @@ def prompt_site_config(quick):
         "sitename": "My site",
         "description": "This is a Ginpar project",
         "url": "/",
-        "theme": "gart",
+        "theme": "davidomarf/gart",
         "content_path": "sketches",
         "build_path": "public",
     }
