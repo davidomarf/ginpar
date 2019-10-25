@@ -32,12 +32,70 @@ import yaml
 import click
 from jinja2 import Environment, FileSystemLoader
 
-import ginpar.generators as gg
 from ginpar.utils.echo import echo, success
-from ginpar.utils.strings import unkebab
+from ginpar.utils.strings import unkebab, camel_to_space, space_to_kebab
 from ginpar.utils.git import clone_repo, delete_git_files
 
 import click
+
+
+def add_name_key(e):
+    """Adds the name field for the parameter received
+
+    The received dict has the format `{ NAME: { "attrs": attrs, ... }}`,
+    where NAME is the only key that the dict should have.
+
+    If e[NAME]["name"] exists, it will return the same element. Otherwise, it
+    will create a ["name"] key using NAME and filtering to make it space case.
+
+    Examples
+    --------
+
+    >>> e = {"MY_TEST": {"attrs": {} }}
+    >>> add_name_key(e)
+    {"MY_TEST": {"attrs": {}, "name": "My test"}}
+
+    >>> a = {"SECOND_TEST": {"attrs": {}, "name": "OwO" }}
+    >>> add_name_key(e)
+    {"SECOND_TEST": {"attrs": {}, "name": "OwO" }}
+
+    Parameters
+    ----------
+    e : dict
+        Dictionary with only one key `k` that will be used to set e["name"]
+    """
+    name = list(e)[0]
+
+    if "name" in e[name]:
+        return e
+    else:
+        e[name]["name"] = camel_to_space(name).capitalize()
+        return e
+
+
+def add_id_key(e):
+    """Adds the id field for the parameter received
+
+    The received dict has the format `{ NAME: { "attrs": attrs, "name": NAME }}`.
+
+    This will createa e[NAME]["id"] using e[NAME]["name] and filtering it to
+    create a kebab-case.
+
+    Examples
+    --------
+
+    >>> e = {"SECOND_TEST": {"attrs": {}, "name": "Burger" }}
+    >>> add_name_key(e)
+    {"SECOND_TEST": {"attrs": {}, "name": "Burger" }}
+
+    Parameters
+    ----------
+    e : dict
+        Dictionary with a key [NAME]["name"]
+    """
+    name = list(e)[0]
+    e[name]["id"] = space_to_kebab(e[name]["name"]).lower()
+    return e
 
 
 def get_sketches(content_path):
@@ -212,32 +270,36 @@ def render_sketch_page(build_path, sketch, site, page_template):
 
     ## Convert the form JSON into a dict
     form_dict = sketch["data"]
+    print(list(map(add_id_key, map(add_name_key, form_dict["params"]))))
 
-    ## Add name key to the dict elements
-    form_dict = gg.add_name(form_dict)
+    # print(form_dict["params"][0])
+    # print(add_name_key(form_dict["params"][0]))
+    # add_id_key(form_dict["params"][0]))
+    # ## Add name key to the dict elements
+    # form_dict = gg.add_name(form_dict)
 
-    ## Create index.html
-    sketch_index = open(f"public/{sketch['name']}/index.html", "w+")
-    sketch_index.write(
-        page_template.render(
-            sketch=unkebab(sketch["name"]), form=gg.sketch_index(form_dict), site=site
-        )
-    )
-    sketch_index.close()
+    # ## Create index.html
+    # sketch_index = open(f"public/{sketch['name']}/index.html", "w+")
+    # sketch_index.write(
+    #     page_template.render(
+    #         sketch=unkebab(sketch["name"]), form=gg.sketch_index(form_dict), site=site
+    #     )
+    # )
+    # sketch_index.close()
 
-    ## Create sketch.js
-    sketch_path = f"public/{sketch['name']}/sketch.js"
-    sketch_script = open(sketch_path, "w+")
+    # ## Create sketch.js
+    # sketch_path = f"public/{sketch['name']}/sketch.js"
+    # sketch_script = open(sketch_path, "w+")
 
-    ## Copy all the content from original sketches/{title}.js to sketch.js
-    sf = open(sketch["script"], "r")
+    # ## Copy all the content from original sketches/{title}.js to sketch.js
+    # sf = open(sketch["script"], "r")
 
-    sketch_script.write(gg.makeValueGetter(form_dict))
+    # sketch_script.write(gg.makeValueGetter(form_dict))
 
-    for x in sf.readlines():
-        sketch_script.write(x)
-    sf.close()
-    sketch_script.close()
+    # for x in sf.readlines():
+    #     sketch_script.write(x)
+    # sf.close()
+    # sketch_script.close()
 
 
 def read_config(path):
