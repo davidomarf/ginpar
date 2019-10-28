@@ -36,6 +36,8 @@ from ginpar.utils.echo import echo, success
 from ginpar.utils.strings import unkebab, camel_to_space, space_to_kebab
 from ginpar.utils.git import clone_repo, delete_git_files
 
+import ginpar.generators as gg
+
 import click
 
 
@@ -233,8 +235,17 @@ def render_index(build_path, sketches, site, page_template):
     )
     index.close()
 
+def param_to_dict(param):
+    param_var = list(param)[0]
+    return {
+        "var": param_var,
+        "id": param_var.lower(),
+        "attrs": param[param_var]["attrs"],
+        "name": param_var.capitalize()
+    }
 
-def render_sketch_page(build_path, sketch, site, page_template):
+
+def render_sketch_page(build_path, sketch, site, page_template, input_templates):
     """Render a sketch page
 
     This generates the page for a single sketch. This will convert the
@@ -268,38 +279,38 @@ def render_sketch_page(build_path, sketch, site, page_template):
     ## Create a directory with the sketch title
     os.mkdir(os.path.join(build_path, sketch["name"]))
 
-    ## Convert the form JSON into a dict
-    form_dict = sketch["data"]
-    print(list(map(add_id_key, map(add_name_key, form_dict["params"]))))
+    params = list(map(param_to_dict, sketch["data"]["params"]))
+    default_input = next((x for x in input_templates if x.name.endswith("default.html")))
 
-    # print(form_dict["params"][0])
-    # print(add_name_key(form_dict["params"][0]))
-    # add_id_key(form_dict["params"][0]))
-    # ## Add name key to the dict elements
-    # form_dict = gg.add_name(form_dict)
+    content = ""
+    for param in params:
+        input_type = param["attrs"]["type"]
+        template = next(
+            (x for x in input_templates if x.name.endswith(input_type + ".html")),
+            default_input)
+        content = content + template.render(param = param)
 
-    # ## Create index.html
-    # sketch_index = open(f"public/{sketch['name']}/index.html", "w+")
-    # sketch_index.write(
-    #     page_template.render(
-    #         sketch=unkebab(sketch["name"]), form=gg.sketch_index(form_dict), site=site
-    #     )
-    # )
-    # sketch_index.close()
+    ## Create index.html
+    sketch_index = open(f"public/{sketch['name']}/index.html", "w+")
+    sketch_index.write(
+        page_template.render(
+            sketch=unkebab(sketch["name"]), form = "<form>\n" + content + "\n</form>", site=site
+        )
+    )
+    sketch_index.close()
 
-    # ## Create sketch.js
-    # sketch_path = f"public/{sketch['name']}/sketch.js"
-    # sketch_script = open(sketch_path, "w+")
+    ## Create sketch.js
+    sketch_path = f"public/{sketch['name']}/sketch.js"
+    sketch_script = open(sketch_path, "w+")
 
-    # ## Copy all the content from original sketches/{title}.js to sketch.js
-    # sf = open(sketch["script"], "r")
+    ## Copy all the content from original sketches/{title}.js to sketch.js
+    sf = open(sketch["script"], "r")
 
-    # sketch_script.write(gg.makeValueGetter(form_dict))
-
-    # for x in sf.readlines():
-    #     sketch_script.write(x)
-    # sf.close()
-    # sketch_script.close()
+    sketch_script.write(gg.makeValueGetter(list(params)))
+    for x in sf.readlines():
+        sketch_script.write(x)
+    sf.close()
+    sketch_script.close()
 
 
 def read_config(path):
@@ -318,6 +329,14 @@ def read_config(path):
     return config
 
 
+def dict_to_attrs(d):
+    attrs = []
+    for k, v in d.items():
+        attrs.append(f'{k}="{v}"')
+    attrs = " ".join(attrs)
+    return attrs
+
+
 def build(path):
     """Main function of the module. This is what `ginpar build` calls.
 
@@ -329,12 +348,25 @@ def build(path):
 
     _SITE_FILE = "config.yaml"
     _SITE = read_config(_SITE_FILE)
+
     _THEME = _SITE["theme"].split("/")[1]
     _THEME_PATH = os.path.join("themes", _THEME)
+    
     _TEMPLATES_PATH = os.path.join(_THEME_PATH, "templates")
     _SKETCHES_PATH = _SITE["content_path"]
+
     _jinja_env = Environment(loader=FileSystemLoader(_TEMPLATES_PATH), trim_blocks=True)
+
     _jinja_env.filters["unkebab"] = unkebab
+    _jinja_env.filters["getattrs"] = dict_to_attrs
+
+    input_templates = map(
+        lambda t : _jinja_env.get_template(t),
+        filter(
+            lambda t : t.startswith(os.path.join("form", "inputs")),
+            _jinja_env.list_templates()
+        )
+    )
 
     if not os.path.isdir(_THEME_PATH):
         clone_repo(_SITE["theme"], _THEME_PATH)
@@ -356,6 +388,6 @@ def build(path):
     echo("Building sketches:")
     for sketch in sketches:
         echo(f"  Building {sketch['name']}")
-        render_sketch_page(path, sketch, _SITE, _jinja_env.get_template("sketch.html"))
+        render_sketch_page(path, sketch, _SITE, _jinja_env.get_template("sketch.html"), input_templates)
 
     success("Success.")
