@@ -380,9 +380,7 @@ def build(path):
     ## Create the sketches list
     sketches = list(get_sketches(_SKETCHES_PATH))
     echo(f"Found {len(sketches)} sketch(es)")
-    print(sketches[0]["name"])
     sketches.sort(key=lambda a : a["data"]["date"], reverse=True)
-    print(sketches[0]["name"])
 
     render_index(path, sketches, _SITE, _jinja_env.get_template("index.html"))
     echo("Building main page")
