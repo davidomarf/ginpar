@@ -26,6 +26,9 @@ Features:
 - Easy replicability of each final result.
 - Index page to list all your sketches.
 
+Check [ginpar-quickstar.netlify.com](https://ginpar-quickstart.netlify.com/) to
+see how a site generated with Ginpar looks like.
+
 The following Introduction is part of the [Ginpar Documentation][ginpar-docs] and
 may be read at [Introduction][docs-intro]
 
