@@ -278,7 +278,6 @@ def render_sketch_page(build_path, sketch, site, page_template, input_templates)
     """
     ## Create a directory with the sketch title
     os.mkdir(os.path.join(build_path, sketch["name"]))
-
     params = list(map(param_to_dict, sketch["data"]["params"]))
     default_input = next((x for x in input_templates if x.name.endswith("default.html")))
 
@@ -360,13 +359,13 @@ def build(path):
     _jinja_env.filters["unkebab"] = unkebab
     _jinja_env.filters["getattrs"] = dict_to_attrs
 
-    input_templates = map(
+    input_templates = list(map(
         lambda t : _jinja_env.get_template(t),
         filter(
             lambda t : t.startswith(os.path.join("form", "inputs")),
             _jinja_env.list_templates()
         )
-    )
+    ))
 
     if not os.path.isdir(_THEME_PATH):
         clone_repo(_SITE["theme"], _THEME_PATH)
@@ -381,6 +380,9 @@ def build(path):
     ## Create the sketches list
     sketches = list(get_sketches(_SKETCHES_PATH))
     echo(f"Found {len(sketches)} sketch(es)")
+    print(sketches[0]["name"])
+    sketches.sort(key=lambda a : a["data"]["date"], reverse=True)
+    print(sketches[0]["name"])
 
     render_index(path, sketches, _SITE, _jinja_env.get_template("index.html"))
     echo("Building main page")
