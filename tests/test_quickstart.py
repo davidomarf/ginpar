@@ -69,4 +69,4 @@ def test_quickstart_removes_git_files():
                 if file.startswith(".git"):
                     git_files.append(file)
 
-        assert git_files == []
+        assert ".git" not in git_files
