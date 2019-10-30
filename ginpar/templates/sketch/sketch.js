@@ -2,7 +2,7 @@
  * to do it, you **must** use `var` instead of `let` or `const`.
  */
 
-var DIMENSIONS = [400, 2048]
+var DIMENSIONS = [2048, 2048]
 
 /**
  * Standard function of p5js
