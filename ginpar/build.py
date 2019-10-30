@@ -359,6 +359,12 @@ def build(path):
     _jinja_env.filters["unkebab"] = unkebab
     _jinja_env.filters["getattrs"] = dict_to_attrs
 
+
+
+    if not os.path.isdir(_THEME_PATH):
+        clone_repo(_SITE["theme"], _THEME_PATH)
+        delete_git_files(_THEME_PATH)
+
     input_templates = list(map(
         lambda t : _jinja_env.get_template(t),
         filter(
@@ -366,10 +372,6 @@ def build(path):
             _jinja_env.list_templates()
         )
     ))
-
-    if not os.path.isdir(_THEME_PATH):
-        clone_repo(_SITE["theme"], _THEME_PATH)
-        delete_git_files(_THEME_PATH)
 
     create_publishing_directory(path)
     echo(f"Building in `{os.path.abspath(path)}`")

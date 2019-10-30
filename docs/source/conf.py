@@ -23,7 +23,7 @@ copyright = '2019, David Omar Flores Chavez'
 author = 'David Omar Flores Chavez'
 
 # The full version, including alpha/beta/rc tags
-release = 'v0.7.1'
+release = 'v0.7.2'
 
 
 # -- General configuration ---------------------------------------------------
