@@ -237,11 +237,15 @@ def render_index(build_path, sketches, site, page_template):
 
 def param_to_dict(param):
     param_var = list(param)[0]
+    if "name" in param[param_var]:
+        name = param[param_var]["name"]
+    else:
+        name = camel_to_space(param_var.capitalize())
     return {
         "var": param_var,
         "id": param_var.lower(),
         "attrs": param[param_var]["attrs"],
-        "name": param_var.capitalize()
+        "name": name
     }
 
 
