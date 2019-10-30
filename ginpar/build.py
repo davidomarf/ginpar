@@ -231,7 +231,7 @@ def render_index(build_path, sketches, site, page_template):
 
     # Write the contents of the rendered template into the index file
     index.write(
-        page_template.render(sketches=map(lambda a: a["name"], sketches), site=site)
+        page_template.render(sketches=sketches, site=site)
     )
     index.close()
 
