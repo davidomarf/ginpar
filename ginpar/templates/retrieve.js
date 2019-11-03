@@ -1,16 +1,19 @@
+var RANDOM_SEED = Math.round(Math.random() * 100000000)
+var NOISE_SEED = Math.round(Math.random() * 100000000)
+
 {% if global_seed -%}
-function newRandomSeeds(){
-    RANDOM_SEED = Math.random() * 100000000
-    NOISE_SEED = Math.random() * 100000000
+function ginpar_newRandomSeeds(){
+    RANDOM_SEED = Math.round(Math.random() * 100000000)
+    NOISE_SEED = Math.round(Math.random() * 100000000)
 }
 {%- endif %}
 
 
-function resetDraw(){
-    updateVars(); setup(); draw();
+function ginpar_resetDraw(){
+    ginpar_updateVars(); setup(); draw();
 }
 
-function updateVars(){
+function ginpar_updateVars(){
     {% for param in params -%}
         {%- if param["attrs"]['type'] == 'dimensions' -%}
 
@@ -28,5 +31,10 @@ function updateVars(){
     {%- endfor %}
 
 }
-updateVars()
+
+function ginpar_save(){
+    save(`${RANDOM_SEED}-${NOISE_SEED}`)
+}
+
+ginpar_updateVars()
 {{'\n'}}
