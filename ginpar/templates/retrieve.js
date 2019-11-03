@@ -9,17 +9,18 @@ function resetDraw(){
 
 function updateVars(){
     {% for param in params -%}
-        {% if param["attrs"]['type'] == 'dimensions' -%}
+        {%- if param["attrs"]['type'] == 'dimensions' -%}
 
         {{ param.var }} = [
-                    document.getElementById("{{ param.id }}-0").value,
-                    document.getElementById("{{ param.id }}-1").value
+                    Number(document.getElementById("{{ param.id }}-0").value),
+                    Number(document.getElementById("{{ param.id }}-1").value)
                 ];
 
         {% else %}
         
-        {{ param.var }} = document.getElementById("{{param.id}}").value;
-
+        {{ param.var }} = 
+                {%- if param.attrs.type == "number" -%} Number{%- endif -%}
+                (document.getElementById("{{param.id}}").value);
         {%- endif  %}
     {%- endfor %}
 
