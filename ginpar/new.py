@@ -70,14 +70,15 @@ def new(sketch):
         error(f"Failure.")
         echo(f"{path} already exists.")
         raise click.Abort()
-    
+
     create_folder(path)
 
     sketch_template = _jinja_env.get_template("sketch.js")
     data_template = _jinja_env.get_template("data.yaml")
     create_file(os.path.join(path, "sketch.js"), sketch_template.render())
-    create_file(os.path.join(path, "data.yaml"), data_template.render(
-        today = date.today().strftime("%Y-%m-%d") 
-        ))
+    create_file(
+        os.path.join(path, "data.yaml"),
+        data_template.render(today=date.today().strftime("%Y-%m-%d")),
+    )
 
     echo(f"\nYour new sketch {path} is ready.\n")

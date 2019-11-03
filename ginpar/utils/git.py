@@ -6,6 +6,7 @@ import subprocess
 from ginpar.utils.echo import success, echo, error
 from ginpar.utils.files import try_remove
 
+
 def clone_repo(repo, path):
     """Clone the contents of a repository in a custom path
 
@@ -30,6 +31,7 @@ def clone_repo(repo, path):
 
     success(f"Successfully cloned {repo}.\n")
     return 0
+
 
 def delete_git_files(path):
     """Delete the git files to only keep the relevant files

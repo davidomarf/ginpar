@@ -51,5 +51,5 @@ def serve(port):
 
     server = Server()
 
-    server.watch(site["content_path"], 'ginpar build')
+    server.watch(site["content_path"], "ginpar build")
     server.serve(port=port, root=site["build_path"])

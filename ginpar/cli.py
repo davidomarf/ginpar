@@ -34,7 +34,7 @@ def cli():
         "The PATH where the site will be built. [ <config.build_path>, public ] "
         "This path is relative to the current directory. When no option is provided "
         "Ginpar will read the <config.build_path> from the configuration file."
-        ),
+    ),
 )
 def build(path):
     """Build the project content into PATH.
@@ -63,7 +63,7 @@ def build(path):
         "If Ginpar finds an existing directory with the same name of the "
         "project being initialized, it'll force its removal. "
         "Only do this if you're completely sure you want to do it."
-        ),
+    ),
 )
 @click.option(
     "--quick",
@@ -118,7 +118,7 @@ def new(sketch):
         "If Ginpar finds an existing directory with the same name of the sample content, "
         "it'll force its removal. "
         "Only do this if you're completely sure you want to do it."
-        ),
+    ),
 )
 def quickstart(force):
     """Import a working sample project.

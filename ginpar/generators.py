@@ -37,7 +37,7 @@ _jinja_env.filters["getattrs"] = dict_to_attrs
 
 def makeValueGetter(global_seed, attrs):
     _TEMPLATE = _jinja_env.get_template("retrieve.js")
-    return _TEMPLATE.render(global_seed = global_seed, params=attrs)
+    return _TEMPLATE.render(global_seed=global_seed, params=attrs)
 
 
 def sketch_to_dict(s):

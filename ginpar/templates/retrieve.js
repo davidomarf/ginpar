@@ -10,7 +10,7 @@ function ginpar_newRandomSeeds(){
 
 
 function ginpar_resetDraw(){
-    ginpar_updateVars(); setup(); draw();
+    ginpar_updateVars(); draw();
 }
 
 function ginpar_updateVars(){

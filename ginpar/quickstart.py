@@ -32,6 +32,7 @@ from ginpar.utils.echo import success, alert, echo, error
 from ginpar.utils.files import try_remove
 from ginpar.utils.git import clone_repo, delete_git_files
 
+
 def quickstart(force):
     """Main function of the module. This is what `ginpar quickstart` calls.
 
