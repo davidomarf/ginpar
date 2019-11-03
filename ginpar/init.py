@@ -102,7 +102,7 @@ def init(force, quick):
     config_yaml = os.path.join(path, "config.yaml")
 
     echo("\n---\n")
-    
+
     if force:
         echo("\n---\n")
         try_remove(path)

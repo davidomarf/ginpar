@@ -230,10 +230,9 @@ def render_index(build_path, sketches, site, page_template):
     index = open(os.path.join(build_path, "index.html"), "w")
 
     # Write the contents of the rendered template into the index file
-    index.write(
-        page_template.render(sketches=sketches, site=site)
-    )
+    index.write(page_template.render(sketches=sketches, site=site))
     index.close()
+
 
 def param_to_dict(param):
     param_var = list(param)[0]
@@ -245,7 +244,7 @@ def param_to_dict(param):
         "var": param_var,
         "id": param_var.lower(),
         "attrs": param[param_var]["attrs"],
-        "name": name
+        "name": name,
     }
 
 
@@ -283,21 +282,26 @@ def render_sketch_page(build_path, sketch, site, page_template, input_templates)
     ## Create a directory with the sketch title
     os.mkdir(os.path.join(build_path, sketch["name"]))
     params = list(map(param_to_dict, sketch["data"]["params"]))
-    default_input = next((x for x in input_templates if x.name.endswith("default.html")))
+    default_input = next(
+        (x for x in input_templates if x.name.endswith("default.html"))
+    )
 
     content = ""
     for param in params:
         input_type = param["attrs"]["type"]
         template = next(
             (x for x in input_templates if x.name.endswith(input_type + ".html")),
-            default_input)
-        content = content + template.render(param = param)
+            default_input,
+        )
+        content = content + template.render(param=param)
 
     ## Create index.html
     sketch_index = open(f"public/{sketch['name']}/index.html", "w+")
     sketch_index.write(
         page_template.render(
-            sketch=unkebab(sketch["name"]), form = "<form>\n" + content + "\n</form>", site=site
+            sketch=unkebab(sketch["name"]),
+            form="<form>\n" + content + "\n</form>",
+            site=site,
         )
     )
     sketch_index.close()
@@ -308,8 +312,12 @@ def render_sketch_page(build_path, sketch, site, page_template, input_templates)
 
     ## Copy all the content from original sketches/{title}.js to sketch.js
     sf = open(sketch["script"], "r")
-
-    sketch_script.write(gg.makeValueGetter(list(params)))
+    sketch_script.write(
+        gg.makeValueGetter(
+            ("global_seed" in sketch["data"] and sketch["data"]["global_seed"]),
+            list(params),
+        )
+    )
     for x in sf.readlines():
         sketch_script.write(x)
     sf.close()
@@ -354,7 +362,7 @@ def build(path):
 
     _THEME = _SITE["theme"].split("/")[1]
     _THEME_PATH = os.path.join("themes", _THEME)
-    
+
     _TEMPLATES_PATH = os.path.join(_THEME_PATH, "templates")
     _SKETCHES_PATH = _SITE["content_path"]
 
@@ -363,19 +371,19 @@ def build(path):
     _jinja_env.filters["unkebab"] = unkebab
     _jinja_env.filters["getattrs"] = dict_to_attrs
 
-
-
     if not os.path.isdir(_THEME_PATH):
         clone_repo(_SITE["theme"], _THEME_PATH)
         delete_git_files(_THEME_PATH)
 
-    input_templates = list(map(
-        lambda t : _jinja_env.get_template(t),
-        filter(
-            lambda t : t.startswith(os.path.join("form", "inputs")),
-            _jinja_env.list_templates()
+    input_templates = list(
+        map(
+            lambda t: _jinja_env.get_template(t),
+            filter(
+                lambda t: t.startswith(os.path.join("form", "inputs")),
+                _jinja_env.list_templates(),
+            ),
         )
-    ))
+    )
 
     create_publishing_directory(path)
     echo(f"Building in `{os.path.abspath(path)}`")
@@ -386,7 +394,7 @@ def build(path):
     ## Create the sketches list
     sketches = list(get_sketches(_SKETCHES_PATH))
     echo(f"Found {len(sketches)} sketch(es)")
-    sketches.sort(key=lambda a : a["data"]["date"], reverse=True)
+    sketches.sort(key=lambda a: a["data"]["date"], reverse=True)
 
     render_index(path, sketches, _SITE, _jinja_env.get_template("index.html"))
     echo("Building main page")
@@ -394,6 +402,8 @@ def build(path):
     echo("Building sketches:")
     for sketch in sketches:
         echo(f"  Building {sketch['name']}")
-        render_sketch_page(path, sketch, _SITE, _jinja_env.get_template("sketch.html"), input_templates)
+        render_sketch_page(
+            path, sketch, _SITE, _jinja_env.get_template("sketch.html"), input_templates
+        )
 
     success("Success.")
