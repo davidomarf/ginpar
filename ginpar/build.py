@@ -308,8 +308,7 @@ def render_sketch_page(build_path, sketch, site, page_template, input_templates)
 
     ## Copy all the content from original sketches/{title}.js to sketch.js
     sf = open(sketch["script"], "r")
-
-    sketch_script.write(gg.makeValueGetter(list(params)))
+    sketch_script.write(gg.makeValueGetter(("global_seed" in sketch["data"] and sketch["data"]["global_seed"]), list(params)))
     for x in sf.readlines():
         sketch_script.write(x)
     sf.close()

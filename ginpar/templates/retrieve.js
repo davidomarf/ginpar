@@ -1,7 +1,10 @@
+{% if global_seed -%}
 function newRandomSeeds(){
-    RANDOM_S = Math.random() * 100000000
-    NOISE_S = Math.random() * 10000000
+    RANDOM_SEED = Math.random() * 100000000
+    NOISE_SEED = Math.random() * 100000000
 }
+{%- endif %}
+
 
 function resetDraw(){
     updateVars(); setup(); draw();
