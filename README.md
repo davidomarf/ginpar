@@ -43,7 +43,6 @@ may be read at [Introduction][docs-intro]
     - [Adapting existing sketches](#adapting-existing-sketches)
     - [Specifying the parameters](#specifying-the-parameters)
     - [Serving & Building](#serving-&-building)
-    - [Deploying](#deploying)
 - [Build with](#built-with)
 - [Versioning](#versioning)
 - [Contributors](#contributors)
@@ -67,7 +66,24 @@ The two main objectives of Ginpar are:
 - Making interactive websites to share the artist's work, letting users play
   with the same GUI.
 
-For a live example of a website built with Ginpar, check this example_.
+
+The basic structure of a Ginpar project consists of a ``config.yaml`` file,
+and a ``sketches`` directory.
+
+It's easy to adapt your existing sketches to work with Ginpar. In fact, the
+only **necessary** step is to add ``.parent("artwork-container")`` to the
+``createCanvas()`` call.
+
+But to fully take advantage of Ginpar ---that is, the interactive sketch with
+custom parameters---, you need to create a ``data.yaml`` file. Check 
+[Adapting existing sketches](#adapting-existing-sketches) and 
+[Specifying the parameters](#specifying-the-parameters).
+
+**To be fully sure of how easy is to use Ginpar, check this
+[example][ginpar-quickstart] together with its 
+[source code][quickstart-repo].** 
+You can ignore ``requirements.txt``, ``runtime.txt``, ``netlify.toml``,
+``README.md``, and ``.gitignore``.
 
 ### Prerequisites
 
@@ -97,22 +113,24 @@ This will create the following directory structure::
 
     .
     ├── config.yaml
-    ├── sketches/
-    │   └── domino-dancing/
-    │       ├── sketch.js
-    │       └── data.yaml
-    └── themes/
-        └── gart
-            └── ...
+    └── sketches/
+        ├── circles/
+        │   ├── sketch.js
+        │   └── data.yaml
+        └── ...
 
-To open this project in your browser, run:
+To build the project and start a server, run:
 
+    cd quickstart
     ginpar serve
 
-Now, start modifying the contents of ``config.json`` and ``sketches/``.
+And the project will be live in [localhost:8080](localhost:8080)
+
+Now, you can start to modify the contents of ``config.yaml`` and 
+``sketches/``.
 
 Next, you should read [Creating new sketches](#creating-new-sketches),
-[Serving & Building](#serving-building), or [Deploying](#deploying).
+or [Serving & Building](#serving-building).
 
 ### Initialization
 
@@ -183,6 +201,7 @@ To create a parameters list, add this to your data file:
 
  ```yaml
 ---
+date: 2019-11-04
 # ... other data
 # ...
 
@@ -235,6 +254,9 @@ Once parsed, Ginpar will produce:
       }
     ```
 
+If the type of the input is a ``number``, Ginpar will parse it before
+assigning it to the variable.
+
 ---
 
 To use this parameters inside your sketch, just use the same name you used as
@@ -242,6 +264,7 @@ key:
 
 ```js
 console.log(MY_VARIABLE)
+// ==> 30
 ```
 
 ### Serving & Building
@@ -262,30 +285,14 @@ Check [ginpar serve][ginpar-serve] and [ginpar build][ginpar-build], or run
 ``ginpar serve --help``, ``ginpar build --help`` to see the full list of
 options and arguments available.
 
-### Deploying
-
-Ginpar also has a command to create the deployment configuration files for
-Netlify. Future versions will also generate the configuration files for other
-deployments enviroments.
-
-**This command won't deploy your site. It'll just create the config files**.
-
-For Netlify, this means creating ``requirements.txt``, ``runtime.txt``, and
-``netlify.toml``.
-
-If you want to set the configuration files manually for other engines, you
-need to:
-
-- Specify the Python version to be above 3.6,
-- Add `ginpar` to the dependencies, usually in a ``requirements.txt`` file,
-- Make the deploy path the same as the :ref:`config:build_path`,
-- Set ``ginpar build`` as the build command.
+---
 
 ## Built With
 
 - [Jinja2][jinja] - Templating language.
 - [Click][click] - CLI Tool composer.
 - [PyYAML][pyyaml] - YAML framework.
+- [Livereload][livereload] - Hot reloading server.
 
 ## Versioning
 
@@ -308,9 +315,6 @@ This project is licensed under the MIT License - see the
 [LICENSE.md](LICENSE) file for details
 
 [semver]: semver.org
-[examples]: examples
-[config-example]: config-example
-[params-api]: params-api
 [jinja]: https://jinja.palletsprojects.com/
 [click]: https://click.palletsprojects.com/
 [pelican]: https://getpelican.com
@@ -322,3 +326,6 @@ This project is licensed under the MIT License - see the
 [ginpar-init]: https://ginpar.readthedocs.io/en/latest/cli.html#ginpar-init
 [ginpar-new]: https://ginpar.readthedocs.io/en/latest/cli.html#ginpar-new
 [pyyaml]:https://pyyaml.org
+[livereload]: https://github.com/lepture/python-livereload
+[ginpar-quickstart]: https://ginpar-quickstart.netlify.com/
+[quickstart-repo]:https://github.com/davidomarf/ginpar-quickstart
