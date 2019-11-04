@@ -34,7 +34,7 @@ from ginpar.utils.echo import echo, error, success
 def read_config(path):
     """Create a dictionary out of the YAML file received
 
-    Paremeters
+    Parameters
     ----------
     path : str
         Path of the YAML file.

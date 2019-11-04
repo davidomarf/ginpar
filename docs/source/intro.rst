@@ -17,7 +17,20 @@ The two main objectives of Ginpar are:
 - Making interactive websites to share the artist's work, letting users play
   with the same GUI.
 
-For a live example of a website built with Ginpar, check this example_.
+The basic structure of a Ginpar project consists of a ``config.yaml`` file,
+and a ``sketches`` directory.
+
+It's easy to adapt your existing sketches to work with Ginpar. In fact, the
+only **necessary** step is to add ``.parent("artwork-container")`` to the
+``createCanvas()`` call.
+
+But to fully take advantage of Ginpar ---that is, the interactive sketch with
+custom parameters---, you need to create a ``data.yaml`` file. Check 
+`Adapting existing sketches`_ and `Specifying the parameters`_.
+
+**To be fully sure of how easy is to use Ginpar, check this** example_ 
+**together with its** `source code`_. You can ignore ``requirements.txt``,
+``runtime.txt``, ``netlify.toml``, ``README.md``, and ``.gitignore``.
 
 Prerequisites
 -------------
@@ -56,24 +69,25 @@ This will create the following directory structure::
 
     .
     ├── config.yaml
-    ├── sketches/
-    │   └── domino-dancing/
-    │       ├── sketch.js
-    │       └── data.yaml
-    └── themes/
-        └── gart
-            └── ...
+    └── sketches/
+        ├── circles/
+        │   ├── sketch.js
+        │   └── data.yaml
+        └── ...
 
-To open this project in your browser, run:
+To build the project and start a server, run:
 
 .. prompt:: bash
 
+    cd quickstart
     ginpar serve
 
-Now, start modifying the contents of ``config.json`` and ``sketches/``.
+And the project will be live in `localhost:8080 <localhost:8080>`_
 
-Next, you should read `Creating new sketches`_, `Serving & Building`_, or
-`Deploying`_.
+Now, you can start to modify the contents of ``config.yaml`` and 
+``sketches/``.
+
+Next, you should read `Creating new sketches`_, or `Serving & Building`_.
 
 Initialization
 --------------
@@ -105,7 +119,7 @@ already set:
     ginpar new [SKETCH]
 
 This will create a new sketch inside your predefined source directory.
-You can set the name when running the command, but it's optional.
+You must set the name of the sketch when running the command.
 
 Check :ref:`cli:ginpar new` or run ``ginpar new --help`` for more information.
 
@@ -120,7 +134,7 @@ to your sketch code.
 Adding it to the list of sketches
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-First, make your sketch detectable for Ginpar:
+First, make your sketch detectable by Ginpar:
 
 #. Create a directory ``my-sketch/`` inside ``sketches/``.
 #. Copy your existent sketch script inside ``my-sketch`` and rename it to
@@ -154,6 +168,7 @@ To create a parameters list, add this to your data file:
 .. code-block:: yaml
 
     ---
+    date: 2019-11-04
     # ... other data
     # ...
 
@@ -204,6 +219,9 @@ Once parsed, Ginpar will produce:
         // More variable updates. One for each params element.
       }
 
+If the type of the input is a ``number``, Ginpar will parse it before
+assigning it to the variable.
+
 ----
 
 To use this parameters inside your sketch, just use the same name you used as
@@ -212,6 +230,7 @@ key:
 .. code-block:: JavaScript
 
   console.log(MY_VARIABLE)
+  // ==> 30
 
 Serving & Building
 ------------------
@@ -229,32 +248,12 @@ Will build your site into the ``build_directory`` path, which by default is
 
   ginpar serve
 
-Will start a new server on ``localhost:8000`` and open your default web
-browser. You can specify the port with ``--port``.
+Will build your site and start a new server on ``localhost:8080``. 
+You can specify the port with ``--port``.
 
 Check :ref:`cli:ginpar serve` and :ref:`cli:ginpar build`, or run
 ``ginpar serve --help``, ``ginpar build --help`` to see the full list of
 options and arguments available.
-
-Deploying
----------
-
-Ginpar also has a command to create the deployment configuration files for
-Netlify. Future versions will also generate the configuration files for other
-deployments enviroments.
-
-**This command won't deploy your site. It'll just create the config files**.
-
-For Netlify, this means creating ``requirements.txt``, ``runtime.txt``, and
-``netlify.toml``.
-
-If you want to set the configuration files manually for other engines, you
-need to:
-
-- Specify the Python version to be above 3.6,
-- Add `ginpar` to the dependencies, usually in a ``requirements.txt`` file,
-- Make the deploy path the same as the :ref:`config:build_path`,
-- Set ``ginpar build`` as the build command.
 
 .. Links
 
@@ -262,3 +261,4 @@ need to:
 .. _CLI: /cli
 .. _data: /data
 .. _config: /config
+.. _source code: https://github.com/davidomarf/ginpar-quickstart

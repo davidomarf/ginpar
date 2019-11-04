@@ -3,9 +3,9 @@
 This module implements the building command for the ginpar static content
 generator.
 
-`build` will read the configuration file in search for `build_path` and
-`source_path`. If not defined, `build` will use `"public"` and
-`"sketches`, respectively.
+``build`` will read the configuration file in search for ``build_path`` and
+``source_path``. If not defined, `build` will use ``"public"`` and
+``"sketches"``, respectively.
 
 Examples
 --------
@@ -266,7 +266,6 @@ def render_sketch_page(build_path, sketch, site, page_template, input_templates)
 
     Parameters
     ----------
-
     build_path : str
         Path of the build.
 
@@ -327,7 +326,7 @@ def render_sketch_page(build_path, sketch, site, page_template, input_templates)
 def read_config(path):
     """Create a dictionary out of the YAML file received
 
-    Paremeters
+    Parameters
     ----------
     path : str
         Path of the YAML file.

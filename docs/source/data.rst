@@ -23,6 +23,17 @@ The only indispensable key is ``params``. Every other key it's optional.
 **If you want to use a configuration value for all your sketches, you may want
 to read** :ref:`config:sketch_defaults`.
 
+date
+~~~~
+
+**Date, Required** [**Date.today()**]
+
+Used to sort the sketches in the index. The format is any valid date 
+format, but the suggested is ``YYYY-MM-DD``: 2019-11-04.
+
+The default value is th current day, however, this is only assigned when
+you create the sketch using ``ginpar new [SKETCH]``.
+
 params
 ~~~~~~
 
@@ -70,44 +81,37 @@ however, you can also specify the name to display in the form:
 For a complete list of the fields you can specify for the ``params`` list,
 check :ref:`params:Params API`.
 
-randomizable
-~~~~~~~~~~~~
-
-*Boolean, Optional* [**False**]
-
-When **True**, Ginpar will add a button ``Randomize`` at the end of the form
-that will select random values between the ``min`` and ``max`` values of each
-parameter that has ``randomize: True``.
-
-Check :ref:`params:randomize`.
-
-obfuscate
-~~~~~~~~~
-
-*Boolean, Optional* [**False**]
-
-When **True**, Ginpar will obfuscate the sketch source code before creating
-the script file in the final build.
-
-This option will use `Javascript Obfuscator`_
-
-draft
-~~~~~
-
-*Boolean, Optional* [**False**]
-
-When **True**, Ginpar will skip this sketch in the building proccess.
-
-
 global_seed
 ~~~~~~~~~~~
 
 *Boolean, Optional* [**True**]
 
-When **True**, Ginpar will create a unique base 64 seed for each sketch
-result, and allow the user to put that ID as an input field so it
-automatically sets all the parameter values necessary to generate the same
-result again.
+When **True**, Ginpar will add a button to generate new seeds, and will create
+a file name for the saved image using ``{NAME}-{RANDOM_SEED}-{NOISE_SEED}``.
+
+scripts
+~~~~~~~
+
+*List, Optional* [**site.scripts**]
+
+By default, Ginpar will include all the scripts you specify in the
+``config.yaml``. If you only wona to include a subset of these, you create
+a list of the scripts to include.
+
+.. code-block:: YAML
+
+    # in config.yaml
+    scripts:
+        p5: https://my-p5-url
+        d3: https://my-d3-url
+        extra: https://extra
+    
+    # in data.yaml
+    scripts:
+        - p5
+        - d3
+
+The elements of `data.scripts` must exist as keys in your ``config.yaml`` file.
 
 .. Links
 

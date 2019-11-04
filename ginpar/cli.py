@@ -135,7 +135,17 @@ def quickstart(force):
 
 @cli.command()
 @click.option("--port", "-p", default=8080, help="Port of the server")
-def serve(port):
+@click.option(
+    "--watch",
+    "-w",
+    default=False,
+    is_flag=True,
+    help=(
+        "By default, the server will only watch for changes in the source path, "
+        "but if this flag is received, it'll watch all the project directories."
+    ),
+)
+def serve(port, watch):
     """Start a new server in localhost:PORT.
 
         `ginpar serve` will trigger `ginpar build`, and start a new server inside
@@ -147,7 +157,7 @@ def serve(port):
     from ginpar.serve import serve as ginpar_serve
 
     click.echo("")
-    ginpar_serve(port)
+    ginpar_serve(port, watch)
     click.echo("")
 
 

@@ -21,12 +21,13 @@ import click
 import yaml
 from livereload import Server, shell
 
+from ginpar.build import build
 
 ## TODO: Move read_config into a shared library inside utils
 def read_config(path):
     """Create a dictionary out of the YAML file received
 
-    Paremeters
+    Parameters
     ----------
     path : str
         Path of the YAML file.
@@ -39,7 +40,7 @@ def read_config(path):
     return config
 
 
-def serve(port):
+def serve(port, watch):
     """Main function of the module. This is what `ginpar serve` calls.
 
     Parameters
@@ -48,8 +49,13 @@ def serve(port):
         The port of the server
     """
     site = read_config("config.yaml")
+    
+    build(site["build_path"])
 
     server = Server()
-
     server.watch(site["content_path"], "ginpar build")
+    if watch:
+        server.watch("themes", "ginpar build")
+        server.watch("config.yaml", "ginpar build")
+
     server.serve(port=port, root=site["build_path"])

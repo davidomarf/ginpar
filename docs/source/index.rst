@@ -33,8 +33,9 @@ We recommend starting with the introduction and then move up to the API docs.
    :maxdepth: 2
 
    intro
-   api
+   guide
    cli
+   modules
 
 Other links
 -----------

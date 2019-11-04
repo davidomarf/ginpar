@@ -1,4 +1,4 @@
-ginpar
+numpydoc
 pallets_sphinx_themes
 pallets_sphinx_themes
 sphinx-prompt
