@@ -70,17 +70,6 @@ however, you can also specify the name to display in the form:
 For a complete list of the fields you can specify for the ``params`` list,
 check :ref:`params:Params API`.
 
-randomizable
-~~~~~~~~~~~~
-
-*Boolean, Optional* [**False**]
-
-When **True**, Ginpar will add a button ``Randomize`` at the end of the form
-that will select random values between the ``min`` and ``max`` values of each
-parameter that has ``randomize: True``.
-
-Check :ref:`params:randomize`.
-
 obfuscate
 ~~~~~~~~~
 
