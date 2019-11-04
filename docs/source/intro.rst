@@ -88,6 +88,7 @@ Now, you can start to modify the contents of ``config.yaml`` and
 ``sketches/``.
 
 Next, you should read `Creating new sketches`_, or `Serving & Building`_.
+
 Initialization
 --------------
 
