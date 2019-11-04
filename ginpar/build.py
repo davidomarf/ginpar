@@ -299,7 +299,7 @@ def render_sketch_page(build_path, sketch, site, page_template, input_templates)
     sketch_index = open(f"public/{sketch['name']}/index.html", "w+")
     sketch_index.write(
         page_template.render(
-            sketch=unkebab(sketch["name"]),
+            sketch=sketch,
             form="<form>\n" + content + "\n</form>",
             site=site,
         )
