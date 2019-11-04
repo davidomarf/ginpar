@@ -84,12 +84,8 @@ The structure is this:
 .. code-block:: yaml
 
     scripts:
-        p5:
-            "p5-url"
-        extra:
-            "extra-url"
-        lib:
-            "lib-url"
+        p5: https://p5-url
+        lib: https://my-lib-url
 
 sketch_defaults
 ---------------

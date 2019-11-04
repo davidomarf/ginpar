@@ -11,15 +11,7 @@ theme and generation flow.
    :maxdepth: 3
 
    config
-
-.. toctree::
-   :maxdepth: 3
-
    data
-
-.. toctree::
-   :maxdepth: 3
-
    params
 
 .. _`Gart`: https://github.com/davidomarf/gart
