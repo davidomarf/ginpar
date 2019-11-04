@@ -1,8 +1,8 @@
 import setuptools
 
-version = '0.8.0'
+version = '0.8.1'
 
-requires = ['jinja2 >= 2.7', 'pyyaml', 'click']
+requires = ['jinja2 >= 2.7', 'pyyaml', 'click', 'livereload']
 
 setup_requires = ['wheel']
 

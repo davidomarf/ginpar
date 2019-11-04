@@ -1,5 +1,6 @@
 ---
 date: {{ today }}
+global_seed: True
 params:   
   - DIMENSIONS:
       attrs:
