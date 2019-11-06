@@ -1,6 +1,4 @@
 import os
-import string
-import json
 import yaml
 
 from jinja2 import Environment, FileSystemLoader
@@ -13,8 +11,6 @@ def dict_to_attrs(d):
     attrs = " ".join(attrs)
     return attrs
 
-
-delimiters = "/* ##ginpar */"
 
 _INPUT_TEMPLATES_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "templates"
@@ -38,25 +34,6 @@ _jinja_env.filters["getattrs"] = dict_to_attrs
 def makeValueGetter(global_seed, attrs):
     _TEMPLATE = _jinja_env.get_template("retrieve.js")
     return _TEMPLATE.render(global_seed=global_seed, params=attrs)
-
-
-def sketch_to_dict(s):
-    """Receives the content of a sketch file with a JSON object
-    inside a pair of ginpar delimiters"""
-
-    ## Work only with the substring between two delimiters
-    params_string = s.split(delimiters)[1]
-
-    ## Remove the part of the string before the assignment
-    params = params_string.split("=")[1]
-
-    ## Remove the whitespace at the ends
-    params = params.strip()
-
-    ## Remove the ` characters (first and last elements)
-    params = params[1:-1]
-
-    return json.loads(params)
 
 
 def to_kebab(s):
@@ -91,15 +68,6 @@ def form_tag(fields):
     form.append("\n</form>")
     form = "\n".join(form)
     return form
-
-
-def add_name(fields):
-    """Adds a `name` using the `var` when no `name` was specified"""
-    for field in fields:
-        if "name" not in field:
-            field["name"] = " ".join(field["var"].split("_")).capitalize()
-        field["id"] = to_kebab(field["name"])
-    return fields
 
 
 def sketch_index(sketch):

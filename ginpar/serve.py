@@ -19,7 +19,7 @@ To start a new server in a custom port::
 """
 import click
 import yaml
-from livereload import Server, shell
+from livereload import Server
 
 from ginpar.build import build
 
@@ -49,7 +49,7 @@ def serve(port, watch):
         The port of the server
     """
     site = read_config("config.yaml")
-    
+
     build(site["build_path"])
 
     server = Server()
