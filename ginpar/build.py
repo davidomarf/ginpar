@@ -176,6 +176,24 @@ def render_index(build_path, sketches, site, page_template):
 
 
 def param_to_dict(param):
+    """Receive a parameter entry and convert it into a Python dictionary
+
+    A parameter entry looks like ``[{ VAR : CONTENTS_OF_VAR }]``. This function
+    turns that entry into a dictionary with keys ``{var, id, name, attrs}``.
+
+    The ``attrs`` key must exist inside ``COTENTS_OF_VAR``.
+
+    Parameters
+    ----------
+    param : dict
+        A parameter as specified inside the ``data.yaml`` file of the sketch.
+
+    Returns
+    -------
+    dict
+        A properly formatted dictionary to use inside Ginpar with keys ``{var, 
+        id, attrs, name}``.
+    """
     param_var = list(param)[0]
     if "name" in param[param_var]:
         name = param[param_var]["name"]
@@ -279,6 +297,22 @@ def read_config(path):
 
 
 def dict_to_attrs(d):
+    """Filter to convert a python dictionary into a HTML attributes.
+
+    For each (key, value) pair inside the dict, a ``key=value`` string will
+    be created.
+
+    Parameters
+    ----------
+    d : dict
+        Dictionary containing the key value attributes.
+
+    Returns
+    -------
+    str
+        String containing all the attributes of the dictionary separated with spaces.
+    """
+
     attrs = []
     for k, v in d.items():
         attrs.append(f'{k}="{v}"')
