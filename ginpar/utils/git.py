@@ -1,4 +1,4 @@
-"""This module handles repository downloads
+"""Git repository management inside Ginpar for themes and quickstart.
 """
 import os
 import subprocess
