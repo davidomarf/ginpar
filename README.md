@@ -4,13 +4,6 @@
 [![Build](https://github.com/davidomarf/ginpar/workflows/build/badge.svg)](https://github.com/davidomarf/ginpar/actions?workflow=build)
 [![Documentation Status](https://readthedocs.org/projects/ginpar/badge/?version=stable)](https://ginpar.readthedocs.io/en/stable/?badge=stable)
 
-
----
-
-**Ginpar is, and will be unstable until we don't release a v1.0.0.**
-
----
-
 Ginpar is a **static content generator** for interactive P5.js sketches,
 awkwardly named after **Generative Interactive Parametrisable Canvases**.
 
