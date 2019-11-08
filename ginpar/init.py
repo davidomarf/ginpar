@@ -111,6 +111,7 @@ def init(force, quick):
     create_folder(content_path)
     with open(config_yaml, "w") as file:
         yaml.dump(site, file)
+        file.write("scripts:\n  p5:\n    https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js")
 
     echo("\n---\n")
     success(

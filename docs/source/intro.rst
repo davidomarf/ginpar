@@ -257,7 +257,7 @@ options and arguments available.
 
 .. Links
 
-.. _example: https://genp.netlify.com
+.. _example: https://ginpar-quickstart.netlify.com
 .. _CLI: /cli
 .. _data: /data
 .. _config: /config

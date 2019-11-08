@@ -41,65 +41,6 @@ import ginpar.generators as gg
 import click
 
 
-def add_name_key(e):
-    """Adds the name field for the parameter received
-
-    The received dict has the format `{ NAME: { "attrs": attrs, ... }}`,
-    where NAME is the only key that the dict should have.
-
-    If e[NAME]["name"] exists, it will return the same element. Otherwise, it
-    will create a ["name"] key using NAME and filtering to make it space case.
-
-    Examples
-    --------
-
-    >>> e = {"MY_TEST": {"attrs": {} }}
-    >>> add_name_key(e)
-    {"MY_TEST": {"attrs": {}, "name": "My test"}}
-
-    >>> a = {"SECOND_TEST": {"attrs": {}, "name": "OwO" }}
-    >>> add_name_key(e)
-    {"SECOND_TEST": {"attrs": {}, "name": "OwO" }}
-
-    Parameters
-    ----------
-    e : dict
-        Dictionary with only one key `k` that will be used to set e["name"]
-    """
-    name = list(e)[0]
-
-    if "name" in e[name]:
-        return e
-    else:
-        e[name]["name"] = camel_to_space(name).capitalize()
-        return e
-
-
-def add_id_key(e):
-    """Adds the id field for the parameter received
-
-    The received dict has the format `{ NAME: { "attrs": attrs, "name": NAME }}`.
-
-    This will createa e[NAME]["id"] using e[NAME]["name] and filtering it to
-    create a kebab-case.
-
-    Examples
-    --------
-
-    >>> e = {"SECOND_TEST": {"attrs": {}, "name": "Burger" }}
-    >>> add_name_key(e)
-    {"SECOND_TEST": {"attrs": {}, "name": "Burger" }}
-
-    Parameters
-    ----------
-    e : dict
-        Dictionary with a key [NAME]["name"]
-    """
-    name = list(e)[0]
-    e[name]["id"] = space_to_kebab(e[name]["name"]).lower()
-    return e
-
-
 def get_sketches(content_path):
     """Obtain the list of **valid** sketches inside `path`.
 
@@ -235,6 +176,24 @@ def render_index(build_path, sketches, site, page_template):
 
 
 def param_to_dict(param):
+    """Receive a parameter entry and convert it into a Python dictionary
+
+    A parameter entry looks like ``[{ VAR : CONTENTS_OF_VAR }]``. This function
+    turns that entry into a dictionary with keys ``{var, id, name, attrs}``.
+
+    The ``attrs`` key must exist inside ``COTENTS_OF_VAR``.
+
+    Parameters
+    ----------
+    param : dict
+        A parameter as specified inside the ``data.yaml`` file of the sketch.
+
+    Returns
+    -------
+    dict
+        A properly formatted dictionary to use inside Ginpar with keys ``{var, 
+        id, attrs, name}``.
+    """
     param_var = list(param)[0]
     if "name" in param[param_var]:
         name = param[param_var]["name"]
@@ -298,9 +257,7 @@ def render_sketch_page(build_path, sketch, site, page_template, input_templates)
     sketch_index = open(f"public/{sketch['name']}/index.html", "w+")
     sketch_index.write(
         page_template.render(
-            sketch=sketch,
-            form="<form>\n" + content + "\n</form>",
-            site=site,
+            sketch=sketch, form="<form>\n" + content + "\n</form>", site=site
         )
     )
     sketch_index.close()
@@ -340,6 +297,22 @@ def read_config(path):
 
 
 def dict_to_attrs(d):
+    """Filter to convert a python dictionary into a HTML attributes.
+
+    For each (key, value) pair inside the dict, a ``key=value`` string will
+    be created.
+
+    Parameters
+    ----------
+    d : dict
+        Dictionary containing the key value attributes.
+
+    Returns
+    -------
+    str
+        String containing all the attributes of the dictionary separated with spaces.
+    """
+
     attrs = []
     for k, v in d.items():
         attrs.append(f'{k}="{v}"')
